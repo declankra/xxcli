@@ -1,6 +1,6 @@
 # xx
 
-**Twitter/X from the terminal. No browser, no doom scroll.**
+**Twitter/X from the terminal. Stay up to date without the doom scroll.**
 
 ---
 
