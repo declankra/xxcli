@@ -57,6 +57,16 @@ export X_ACCESS_TOKEN_SECRET="your-access-token-secret"
 
 You need a [Twitter Developer account](https://developer.twitter.com/) with at least Free tier access. The Free tier supports posting and reading your home timeline.
 
+### UI/UX Progression
+
+Tracking the interface over time as the product evolves.
+
+#### 2026-03-27
+
+The first usable UX isn't valuable: authenticate, run `xx feed`, and read your timeline in the terminal. At this point the product is basically a focused feed reader that doens't finish it's sentences.
+
+![xxcli UI/UX on 2026-03-27](docs/images/2026-03-27-feed-only.webp)
+
 ## Usage
 
 ### Read your feed
