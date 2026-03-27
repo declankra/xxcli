@@ -4,15 +4,29 @@
 
 ---
 
-I use X to stay current on AI — new tools, frameworks, techniques, research. The space moves so fast that falling behind means missing things that could 10x my workflow.
+I use X to stay current on AI/tech/software/business. This includes new tools, frameworks, techniques, and research I find helpful and interesting as someone who works in the space. The space moves so fast now that it's important to keep up. But it's even more important to protect your focus.
 
-But the way I was consuming it — browser tab, infinite scroll, algorithmic feed — was a trap. I'd open X to check one thing and lose 45 minutes. Every time.
+The browser is very addicting. I'd open X to check one thing and lose 45 minutes. Every time.
 
-The core insight: **good ideas persist over time.** I don't need to check every 30 minutes. I can increase my signal-to-noise ratio dramatically by consuming intentionally — pull the important stuff on my schedule, skip the noise.
+**Good ideas persist over time.** I don't need to check X every 30 minutes, let alone everyday. I can increase my signal-to-noise ratio dramatically by consuming intentionally.
 
-A CLI is inherently less addictive than a feed algorithm designed to keep you scrolling. There's no autoplay, no sidebar recommendations, no "you might also like." You get the content, you read it, you close the terminal. That's the whole point.
+**The CLI strips away the addicting stuff.** I've found the CLI to be helpful with focusin only on the task at hand. It's even gone so far as to almost entirely replaced my use of ChatGPT in the browser at this point. The CLI is a great question-answer machine.
 
-`xx` is short for "not X." Use X without using X.
+I've got questions, want to stay up to date and interact with other ideas, without losing my focus. To me, that means using X without X, "not X". 
+
+---
+
+## What's next
+
+Things I'm building towards:
+
+- **Interacting with ideas** - How can I interact with the ideas, in a way that is immediately practical and actionable, based on how I currently work?
+< embed tweet where i talk about how i use twitter >  
+- **AI-powered relevance filtering** — filter the tweets in my feed most applicable to what my goals are and what I'm working on
+- **Agent-native** — what does a claude code/codex terminal agent need (skills, deterministic tools, user context...) so that the user (myself) could do the above?
+- **User vs agent UX** — what purpose does me using CLI commands vs agent using them on my behalf? what UI/UX makes most sense given goals of applying the ideas fast and interacting with them (asking follow-ups, "how would this work with what im doing with Y?", etc.)
+
+
 
 ---
 
@@ -76,15 +90,6 @@ xx me             # last 10 tweets
 xx me -n 20       # last 20
 ```
 
-## What's next
-
-This is v0.1 — the basics. Things I'm building toward:
-
-- **AI-powered relevance filtering** — surface tweets most applicable to what I'm working on
-- **Smart follow suggestions** — based on who shows up in my For You and Following feeds
-- **Time-gating** — block CLI access during deep focus hours
-- **Thread support** — post multi-tweet threads from a file
-
 ## License
 
-MIT
+MIT - do whatever
