@@ -21,7 +21,11 @@ I've got questions, want to stay up to date and interact with other ideas, witho
 Things I'm building towards:
 
 - **Interacting with ideas** - How can I interact with the ideas, in a way that is immediately practical and actionable, based on how I currently work?
-< embed tweet where i talk about how i use twitter >  
+
+  > "sees new thing -> ah yeah this can be useful -> prompt codex in repo 'how can this be useful?' -> debate if its actually useful"
+  >
+  > — [dkBuilds (@dkbuildsco), March 2, 2026](https://x.com/dkbuildsco/status/2028551284853190733)
+
 - **AI-powered relevance filtering** — filter the tweets in my feed most applicable to what my goals are and what I'm working on
 - **Agent-native** — what does a claude code/codex terminal agent need (skills, deterministic tools, user context...) so that the user (myself) could do the above?
 - **User vs agent UX** — what purpose does me using CLI commands vs agent using them on my behalf? what UI/UX makes most sense given goals of applying the ideas fast and interacting with them (asking follow-ups, "how would this work with what im doing with Y?", etc.)
