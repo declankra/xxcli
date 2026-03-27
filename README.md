@@ -6,7 +6,7 @@
 
 I use X to stay current on AI/tech/software/business. This includes new tools, frameworks, techniques, and research I find helpful and interesting as someone who works in the space. The space moves so fast now that it's important to keep up. But it's even more important to protect your focus.
 
-The browser is very addicting. I'd open X to check one thing and lose 45 minutes. Every time.
+X on the browser is very addicting. I'm too weak at times to resist the scroll (especially on the toilet).
 
 **Good ideas persist over time.** I don't need to check X every 30 minutes, let alone everyday. I can increase my signal-to-noise ratio dramatically by consuming intentionally.
 
