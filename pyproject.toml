@@ -29,9 +29,9 @@ dependencies = [
 xx = "xxcli.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/dkbuildsco/xxcli"
-Repository = "https://github.com/dkbuildsco/xxcli"
-Issues = "https://github.com/dkbuildsco/xxcli/issues"
+Homepage = "https://github.com/declankra/xxcli"
+Repository = "https://github.com/declankra/xxcli"
+Issues = "https://github.com/declankra/xxcli/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -19,7 +19,7 @@ A CLI is inherently less addictive than a feed algorithm designed to keep you sc
 ## Install
 
 ```bash
-git clone https://github.com/dkbuildsco/xxcli.git
+git clone https://github.com/declankra/xxcli.git
 cd xxcli
 pip install -e .
 ```
