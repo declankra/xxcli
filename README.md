@@ -20,6 +20,10 @@ X on the browser is very addicting. I'm too weak at times to resist the scroll (
 
 I've got questions, want to stay up to date and interact with other ideas, without losing my focus. To me, that means using X without X, "not X".
 
+That tension is basically the whole project.
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">I love that my job is now working on the thing that has historically distracted me from my job</p>&mdash; Benji Taylor (@benjitaylor) <a href="https://twitter.com/benjitaylor/status/2037524265109745924?ref_src=twsrc%5Etfw">March 27, 2026</a></blockquote>
+
 ---
 
 ## Install
