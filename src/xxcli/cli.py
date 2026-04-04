@@ -38,7 +38,21 @@ def _handle_api_error(e: tweepy.errors.TweepyException):
     raise SystemExit(1)
 
 
-@click.group()
+class DefaultPostGroup(click.Group):
+    """Click group that defaults to 'post' when the first arg isn't a known command.
+
+    This lets users type `xx "hello world"` instead of `xx post "hello world"`.
+    """
+
+    def parse_args(self, ctx, args):
+        # If there are args and the first one isn't a registered command or --help/--version,
+        # treat it as a shorthand for `post`
+        if args and args[0] not in self.commands and not args[0].startswith("-"):
+            args = ["post"] + args
+        return super().parse_args(ctx, args)
+
+
+@click.group(cls=DefaultPostGroup)
 @click.version_option(version=__version__, prog_name="xx")
 def main():
     """xx — Twitter/X from the terminal. No browser, no doom scroll."""
