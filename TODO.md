@@ -1,19 +1,27 @@
-  Next skills to run (in order):
+  Next steps (in order):
   1. ~~/design-consultation — create DESIGN.md to formalize the terminal design system before implementation.~~ ✓ Done (2026-04-04)
-  2. /plan-ceo-review — review the First-Run Eval Wizard idea (captured in plan). This is a potential v1 scope
-     expansion: onboarding becomes a calibration session that builds an eval dataset from your real preferences.
-     Needs CEO-level review on scope, timing, and whether it's v1 or v1.1.
+  2. ~~/plan-ceo-review — review scope, vision, product principles for xx digest learning system.~~ ✓ Done (2026-04-04)
+     Scope: EXPANSION mode. 7 expansions accepted. Plan: docs/designs/xx-digest-ceo-plan.md
   3. /plan-devex-review — review the developer experience of xx digest before implementation.
      How fast is time-to-first-digest? Is the setup flow intuitive? Does --debug give enough for prompt iteration?
+  4. BUILD — implement xx digest complete learning system per the CEO plan and eng review.
+     Build order: context.py + llm.py (parallel) → digest.py → feedback.py + onboarding.py → cli.py wiring → format.py → tests
 
-  Setup wizard TODO:
-  - Flesh out `xx setup` wizard — model after PostHog's setup flow.
-    PostHog nails onboarding: step-by-step progress, verify-as-you-go (e.g. "send a test event"),
-    contextual guidance at each step, and a clear "you're done" moment.
-    Apply this pattern: walk the user through API key entry, source selection, first digest run,
-    and confirmation that everything works — each step validates before advancing.
-    Related: First-Run Eval Wizard idea (item 2 above) could layer on top of this base setup flow.
+  Product principles (from CEO review + WIRING-PLAN + autoresearch):
+  - No manual config editing — the setup wizard handles all configuration through questions
+  - Self-improve always — agent evolves scoring rules from feedback, triggered every 10 new signals
+  - Not adding more work — using the product IS the eval, zero-friction feedback
+  - Not rigid — light harness, model improvements naturally improve the product
+  - Progressive disclosure — setup wizard reveals complexity gradually
+  - Close loops — every digest feels complete
 
   Design review TODOs (from /plan-design-review):
   - `--brief` flag for xx digest — suppress "Why" explanations for power users. Deferred to post-v1.
     Pick up after a week of daily digest use. Depends on: digest v1 live.
+
+  Deferred from CEO review (v2+):
+  - `--export` markdown (shell piping covers this)
+  - Digest history diff (`--diff`)
+  - Multi-source intelligence (HN, RSS, GitHub trending)
+  - Action routing (ADOPT → GitHub issue)
+  - Full promotion chain with experiment/verdict (when multiple users need statistical rigor)
