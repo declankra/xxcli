@@ -17,3 +17,10 @@ Key routing rules:
 - Architecture review → invoke plan-eng-review
 - Save progress, checkpoint, resume → invoke checkpoint
 - Code quality, health check → invoke health
+
+## Design System
+Always read DESIGN.md before making any visual or UI decisions.
+All color choices, terminal formatting, interaction patterns, and aesthetic direction are defined there.
+DESIGN-PREVIEW.html is the visual reference — open it in a browser to see what the TUI should look like.
+Do not deviate without explicit user approval.
+In QA mode, flag any code that doesn't match DESIGN.md or DESIGN-PREVIEW.html.

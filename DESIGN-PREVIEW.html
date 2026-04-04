@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xx — Terminal Design System Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-hover: #1c2128;
+    --border: #30363d;
+    --border-accent: #00bcd4;
+    --text: #e6edf3;
+    --text-muted: #7d8590;
+    --text-dim: #484f58;
+    --accent: #00bcd4;
+    --accent-dim: #00838f;
+    --success: #3fb950;
+    --error: #f85149;
+    --warning: #d29922;
+    --info: #58a6ff;
+    --like-dim: #7d8590;
+    --rt-dim: #7d8590;
+    --reply-dim: #7d8590;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    background: #000;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .terminal-window {
+    background: var(--bg);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 820px;
+    margin: 0 auto 40px;
+    border: 1px solid var(--border);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  .terminal-titlebar {
+    background: var(--surface);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .terminal-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .terminal-dot.red { background: #ff5f57; }
+  .terminal-dot.yellow { background: #febc2e; }
+  .terminal-dot.green { background: #28c840; }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .terminal-body {
+    padding: 16px 20px;
+    min-height: 400px;
+  }
+
+  /* Section headers */
+  .section-label {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 40px 0 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* Page title outside terminal */
+  h1 {
+    font-family: 'JetBrains Mono', monospace;
+    text-align: center;
+    color: var(--accent);
+    font-size: 28px;
+    margin: 40px 0 8px;
+    font-weight: 700;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 40px;
+  }
+
+  /* ASCII logo */
+  .logo {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    white-space: pre;
+    line-height: 1.2;
+  }
+  .logo-tagline {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* TUI Header Bar */
+  .tui-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .tui-header-brand {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .tui-header-nav {
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+  .tui-header-nav .key {
+    color: var(--accent);
+    background: var(--surface-hover);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    font-size: 10px;
+    margin-right: 2px;
+  }
+
+  /* Tweet card */
+  .tweet-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: var(--surface);
+    transition: border-color 0.15s;
+  }
+  .tweet-card.active {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+  }
+  .tweet-card .tweet-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .tweet-card .author {
+    color: var(--text);
+    font-weight: 700;
+  }
+  .tweet-card .handle {
+    color: var(--text-muted);
+  }
+  .tweet-card .time {
+    color: var(--text-dim);
+    margin-left: auto;
+    font-size: 12px;
+  }
+  .tweet-card .tweet-body {
+    color: var(--text);
+    padding-left: 0;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .tweet-card .tweet-metrics {
+    color: var(--text-dim);
+    font-size: 11px;
+    display: flex;
+    gap: 16px;
+  }
+  .tweet-card .tweet-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .tweet-card .tweet-actions .action {
+    color: var(--text-dim);
+  }
+  .tweet-card .tweet-actions .action .key {
+    color: var(--accent);
+    background: rgba(0,188,212,0.1);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--accent-dim);
+    font-size: 10px;
+    margin-right: 3px;
+  }
+  .tweet-card.active .tweet-actions .action {
+    color: var(--text-muted);
+  }
+
+  /* Selection indicator */
+  .tweet-index {
+    color: var(--text-dim);
+    margin-right: 4px;
+    font-size: 11px;
+    min-width: 20px;
+    display: inline-block;
+  }
+  .tweet-card.active .tweet-index {
+    color: var(--accent);
+  }
+
+  /* Status bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .status-bar .status-accent {
+    color: var(--accent);
+  }
+
+  /* Loading state */
+  .loading-state {
+    padding: 24px;
+    text-align: center;
+  }
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    animation: spin 1s linear infinite;
+    color: var(--accent);
+    margin-right: 8px;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .loading-text {
+    color: var(--text-muted);
+  }
+
+  /* Success message */
+  .success-msg {
+    color: var(--success);
+    padding: 8px 0;
+  }
+  .success-msg .checkmark { margin-right: 6px; }
+
+  /* Error message */
+  .error-msg {
+    border: 1px solid rgba(248,81,73,0.3);
+    border-radius: 6px;
+    padding: 12px 16px;
+    background: rgba(248,81,73,0.05);
+  }
+  .error-msg .error-title {
+    color: var(--error);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .error-msg .error-body {
+    color: var(--text-muted);
+  }
+  .error-msg .error-hint {
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-size: 12px;
+  }
+
+  /* Warning */
+  .warning-msg {
+    color: var(--warning);
+    padding: 8px 0;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 32px 16px;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+  }
+  .empty-state .empty-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--text-dim);
+  }
+  .empty-state .empty-text {
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .empty-state .empty-hint {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+  .empty-state .empty-hint .cmd {
+    color: var(--accent);
+  }
+
+  /* Compose prompt */
+  .compose-prompt {
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 12px 16px;
+    background: rgba(0,188,212,0.05);
+  }
+  .compose-label {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  .compose-input {
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .compose-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--accent);
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+  .compose-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+  .compose-chars {
+    color: var(--text-dim);
+  }
+  .compose-hint {
+    color: var(--text-muted);
+  }
+  .compose-hint .key {
+    color: var(--accent);
+    background: rgba(0,188,212,0.1);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--accent-dim);
+    font-size: 10px;
+  }
+
+  /* Color palette display */
+  .palette {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 8px 0;
+  }
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .swatch-color {
+    width: 48px;
+    height: 32px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .swatch-label {
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+  .swatch-hex {
+    color: var(--text-dim);
+    font-size: 9px;
+  }
+
+  /* Digest card */
+  .digest-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 8px;
+    background: var(--surface);
+  }
+  .digest-card .digest-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .digest-card .digest-title {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .digest-card .digest-date {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+  .digest-card .digest-topic {
+    margin-bottom: 8px;
+  }
+  .digest-card .topic-name {
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .digest-card .topic-summary {
+    color: var(--text-muted);
+    font-size: 12px;
+    padding-left: 12px;
+    border-left: 2px solid var(--accent-dim);
+  }
+  .digest-card .digest-sources {
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-top: 4px;
+    padding-left: 12px;
+  }
+
+  /* Profile */
+  .profile-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    background: var(--surface);
+    margin-bottom: 12px;
+  }
+  .profile-name {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .profile-handle {
+    color: var(--text-muted);
+  }
+  .profile-bio {
+    color: var(--text-muted);
+    margin: 8px 0;
+    line-height: 1.5;
+  }
+  .profile-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .profile-stats .stat-num {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Page layout */
+  .page-title {
+    font-family: 'JetBrains Mono', monospace;
+    text-align: center;
+    margin: 60px 0 8px;
+    color: var(--text);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .page-desc {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-bottom: 24px;
+  }
+
+  /* Theme tokens table */
+  .token-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12px;
+  }
+  .token-table th {
+    text-align: left;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .token-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+  }
+  .token-name { color: var(--accent); }
+  .token-value { color: var(--text-muted); }
+  .token-sample { padding: 2px 8px; border-radius: 3px; }
+
+  /* Dark/Light toggle */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    z-index: 100;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Light mode */
+  body.light {
+    --bg: #ffffff;
+    --surface: #f6f8fa;
+    --surface-hover: #f0f2f4;
+    --border: #d0d7de;
+    --border-accent: #0097a7;
+    --text: #1f2328;
+    --text-muted: #656d76;
+    --text-dim: #8b949e;
+    --accent: #0097a7;
+    --accent-dim: #00838f;
+    --success: #1a7f37;
+    --error: #cf222e;
+    --warning: #9a6700;
+    --info: #0969da;
+    background: #e8eaed;
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="document.body.classList.toggle('light'); this.textContent = document.body.classList.contains('light') ? '● dark' : '○ light'">○ light</button>
+
+<h1>xx</h1>
+<p class="subtitle">Terminal Design System Preview — what xx feels like as a TUI</p>
+
+<!-- ═══════════════ FEED VIEW ═══════════════ -->
+<p class="page-title">Feed View</p>
+<p class="page-desc">The main experience. Tweets in panels, keyboard-driven navigation, action hints on the active card.</p>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-title">xx — feed</span>
+  </div>
+  <div class="terminal-body">
+    <!-- TUI Header -->
+    <div class="tui-header">
+      <span class="tui-header-brand">xx</span>
+      <span class="tui-header-nav">
+        <span class="key">f</span> feed
+        <span class="key">d</span> digest
+        <span class="key">p</span> post
+        <span class="key">m</span> me
+        <span class="key">?</span> help
+      </span>
+    </div>
+
+    <!-- Tweet 1 (active) -->
+    <div class="tweet-card active">
+      <div class="tweet-header">
+        <span class="tweet-index">›</span>
+        <span class="author">Andrej Karpathy</span>
+        <span class="handle">@karpathy</span>
+        <span class="time">2h</span>
+      </div>
+      <div class="tweet-body">
+        The thing about training runs is that they're basically science experiments. You have a hypothesis about your data mix, your learning rate schedule, your architecture choices. Then you burn $2M to find out if you were right. The feedback loop is brutal.
+      </div>
+      <div class="tweet-metrics">
+        <span>847 likes</span>
+        <span>234 RTs</span>
+        <span>89 replies</span>
+      </div>
+      <div class="tweet-actions">
+        <span class="action"><span class="key">r</span> reply</span>
+        <span class="action"><span class="key">l</span> like</span>
+        <span class="action"><span class="key">t</span> retweet</span>
+        <span class="action"><span class="key">o</span> open</span>
+        <span class="action"><span class="key">y</span> copy link</span>
+      </div>
+    </div>
+
+    <!-- Tweet 2 -->
+    <div class="tweet-card">
+      <div class="tweet-header">
+        <span class="tweet-index">2</span>
+        <span class="author">Simon Willison</span>
+        <span class="handle">@simonw</span>
+        <span class="time">4h</span>
+      </div>
+      <div class="tweet-body">
+        New blog post: "Building CLI tools that respect your terminal." The key insight is that NO_COLOR isn't just a nice-to-have, it's about respecting that your tool runs in someone else's environment.
+      </div>
+      <div class="tweet-metrics">
+        <span>312 likes</span>
+        <span>78 RTs</span>
+        <span>23 replies</span>
+      </div>
+    </div>
+
+    <!-- Tweet 3 -->
+    <div class="tweet-card">
+      <div class="tweet-header">
+        <span class="tweet-index">3</span>
+        <span class="author">Guillermo Rauch</span>
+        <span class="handle">@raaborern</span>
+        <span class="time">6h</span>
+      </div>
+      <div class="tweet-body">
+        shipped: Vercel now auto-detects your framework and configures the build. Zero config isn't a feature, it's the absence of a problem.
+      </div>
+      <div class="tweet-metrics">
+        <span>1.2k likes</span>
+        <span>189 RTs</span>
+        <span>45 replies</span>
+      </div>
+    </div>
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span><span class="status-accent">●</span> Home Timeline</span>
+      <span>3 of 20</span>
+      <span><span class="key" style="color:var(--accent);background:var(--surface-hover);padding:1px 5px;border-radius:3px;border:1px solid var(--border);font-size:10px;">j</span>/<span class="key" style="color:var(--accent);background:var(--surface-hover);padding:1px 5px;border-radius:3px;border:1px solid var(--border);font-size:10px;">k</span> navigate &nbsp; <span class="key" style="color:var(--accent);background:var(--surface-hover);padding:1px 5px;border-radius:3px;border:1px solid var(--border);font-size:10px;">q</span> quit</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DIGEST VIEW ═══════════════ -->
+<p class="page-title">Digest View</p>
+<p class="page-desc">AI-curated summary of what matters. The "skip the scroll" feature.</p>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-title">xx — digest</span>
+  </div>
+  <div class="terminal-body">
+    <div class="tui-header">
+      <span class="tui-header-brand">xx</span>
+      <span class="tui-header-nav">
+        <span class="key">f</span> feed
+        <span class="key" style="color:var(--text);border-color:var(--accent);background:rgba(0,188,212,0.15);">d</span> digest
+        <span class="key">p</span> post
+        <span class="key">m</span> me
+      </span>
+    </div>
+
+    <div class="digest-card">
+      <div class="digest-header">
+        <span class="digest-title">Your Daily Digest</span>
+        <span class="digest-date">Apr 4, 2026 · 14 sources</span>
+      </div>
+
+      <div class="digest-topic">
+        <div class="topic-name">LLM Training Economics</div>
+        <div class="topic-summary">
+          Karpathy shared insights on training run costs ($2M+ per experiment). Sully thread on Llama 4 training infra choices. Consensus: the gap between "can afford to train" and "can't" is widening fast.
+        </div>
+        <div class="digest-sources">@karpathy, @soaborenv, @AIatMeta · 3 tweets</div>
+      </div>
+
+      <div class="digest-topic">
+        <div class="topic-name">CLI & Developer Tooling</div>
+        <div class="topic-summary">
+          Simon Willison on respecting terminal environments. Charm.sh v2 release with declarative rendering. Trend toward "software that feels like software" over web wrappers.
+        </div>
+        <div class="digest-sources">@simonw, @chaboracelet · 2 tweets</div>
+      </div>
+
+      <div class="digest-topic">
+        <div class="topic-name">Vercel & Next.js</div>
+        <div class="topic-summary">
+          Zero-config auto-detection shipped. Discussion on whether "zero config" is genuinely simpler or just hides complexity. Rauch's framing: "absence of a problem."
+        </div>
+        <div class="digest-sources">@raaborern · 1 tweet</div>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <span><span class="status-accent">●</span> Digest · last 24h</span>
+      <span style="color:var(--accent);">↵ expand topic</span>
+      <span><span class="key" style="color:var(--accent);background:var(--surface-hover);padding:1px 5px;border-radius:3px;border:1px solid var(--border);font-size:10px;">r</span> refresh</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ COMPOSE VIEW ═══════════════ -->
+<p class="page-title">Compose</p>
+<p class="page-desc">Inline composition with character count and keyboard shortcuts.</p>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-title">xx — post</span>
+  </div>
+  <div class="terminal-body">
+    <div class="tui-header">
+      <span class="tui-header-brand">xx</span>
+      <span class="tui-header-nav">
+        <span class="key">f</span> feed
+        <span class="key">d</span> digest
+        <span class="key" style="color:var(--text);border-color:var(--accent);background:rgba(0,188,212,0.15);">p</span> post
+        <span class="key">m</span> me
+      </span>
+    </div>
+
+    <div class="compose-prompt">
+      <div class="compose-label">NEW POST</div>
+      <div class="compose-input">
+        Just shipped a terminal client for X. The thesis: you can stay current without doom scrolling if you strip away everything except the content.<span class="compose-cursor"></span>
+      </div>
+      <div class="compose-footer">
+        <span class="compose-chars">143 / 280</span>
+        <span class="compose-hint">
+          <span class="key">ctrl+enter</span> post &nbsp;
+          <span class="key">esc</span> cancel
+        </span>
+      </div>
+    </div>
+
+    <br>
+    <div class="success-msg">
+      <span class="checkmark">✓</span> Posted! https://x.com/i/web/status/1903847261
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PROFILE VIEW ═══════════════ -->
+<p class="page-title">Profile</p>
+<p class="page-desc">Your profile card with stats.</p>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-title">xx — me</span>
+  </div>
+  <div class="terminal-body">
+    <div class="tui-header">
+      <span class="tui-header-brand">xx</span>
+      <span class="tui-header-nav">
+        <span class="key">f</span> feed
+        <span class="key">d</span> digest
+        <span class="key">p</span> post
+        <span class="key" style="color:var(--text);border-color:var(--accent);background:rgba(0,188,212,0.15);">m</span> me
+      </span>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-name">Declan K <span class="profile-handle">@declankra</span></div>
+      <div class="profile-bio">Building things. Shipping fast. Staying current without the scroll.</div>
+      <div class="profile-stats">
+        <span><span class="stat-num">1,247</span> followers</span>
+        <span><span class="stat-num">891</span> following</span>
+        <span><span class="stat-num">3,456</span> tweets</span>
+      </div>
+    </div>
+
+    <div class="tweet-card">
+      <div class="tweet-header">
+        <span class="tweet-index">1</span>
+        <span class="author">Declan K</span>
+        <span class="handle">@declankra</span>
+        <span class="time">1d</span>
+      </div>
+      <div class="tweet-body">
+        Hot take: the terminal is the best social media client because it can't show you ads.
+      </div>
+      <div class="tweet-metrics">
+        <span>42 likes</span>
+        <span>8 RTs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ STATES ═══════════════ -->
+<p class="page-title">Interaction States</p>
+<p class="page-desc">Loading, empty, error, success, and warning states.</p>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-title">xx — states</span>
+  </div>
+  <div class="terminal-body">
+    <div class="section-label">Loading</div>
+    <div class="loading-state" style="text-align:left;padding:8px 0;">
+      <span class="spinner">◐</span>
+      <span class="loading-text">Fetching your timeline...</span>
+    </div>
+
+    <div class="section-label">Success</div>
+    <div class="success-msg">
+      <span class="checkmark">✓</span> Liked tweet 1903847261
+    </div>
+    <div class="success-msg">
+      <span class="checkmark">✓</span> Posted! https://x.com/i/web/status/1903847261
+    </div>
+
+    <div class="section-label">Warning</div>
+    <div class="warning-msg">
+      ⚠ Tweet is 312 chars (max 280). Post anyway? [y/N]
+    </div>
+
+    <div class="section-label">Error</div>
+    <div class="error-msg">
+      <div class="error-title">✗ Rate limited</div>
+      <div class="error-body">X API returned 429. Too many requests in the current window.</div>
+      <div class="error-hint">Hint: wait a few minutes and try again. Free tier allows 15 requests per 15-minute window.</div>
+    </div>
+
+    <br>
+
+    <div class="error-msg">
+      <div class="error-title">✗ Unauthorized</div>
+      <div class="error-body">X API returned 401. Your credentials may be expired or this endpoint requires a higher tier.</div>
+      <div class="error-hint">Hint: Free tier supports post, feed, like, reply. User timeline requires Basic ($100/mo).</div>
+    </div>
+
+    <div class="section-label">Empty</div>
+    <div class="empty-state">
+      <div class="empty-icon">○</div>
+      <div class="empty-text">No tweets in your timeline yet</div>
+      <div class="empty-hint">Follow some accounts on X, then run <span class="cmd">xx feed</span> again</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ COLOR SYSTEM ═══════════════ -->
+<p class="page-title">Color System</p>
+<p class="page-desc">Five roles. Every color has a job. No decorative color.</p>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-title">xx — design tokens</span>
+  </div>
+  <div class="terminal-body">
+    <div class="section-label">Brand</div>
+    <div class="palette">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#00bcd4;"></div>
+        <div class="swatch-label">accent</div>
+        <div class="swatch-hex">#00bcd4</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#00838f;"></div>
+        <div class="swatch-label">accent-dim</div>
+        <div class="swatch-hex">#00838f</div>
+      </div>
+    </div>
+
+    <div class="section-label">System</div>
+    <div class="palette">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#3fb950;"></div>
+        <div class="swatch-label">success</div>
+        <div class="swatch-hex">#3fb950</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#f85149;"></div>
+        <div class="swatch-label">error</div>
+        <div class="swatch-hex">#f85149</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#d29922;"></div>
+        <div class="swatch-label">warning</div>
+        <div class="swatch-hex">#d29922</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#58a6ff;"></div>
+        <div class="swatch-label">info</div>
+        <div class="swatch-hex">#58a6ff</div>
+      </div>
+    </div>
+
+    <div class="section-label">Text Hierarchy</div>
+    <div class="palette">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#e6edf3;"></div>
+        <div class="swatch-label">text</div>
+        <div class="swatch-hex">#e6edf3</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#7d8590;"></div>
+        <div class="swatch-label">muted</div>
+        <div class="swatch-hex">#7d8590</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#484f58;"></div>
+        <div class="swatch-label">dim</div>
+        <div class="swatch-hex">#484f58</div>
+      </div>
+    </div>
+
+    <div class="section-label">Surfaces</div>
+    <div class="palette">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0d1117;border-color:#30363d;"></div>
+        <div class="swatch-label">bg</div>
+        <div class="swatch-hex">#0d1117</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#161b22;border-color:#30363d;"></div>
+        <div class="swatch-label">surface</div>
+        <div class="swatch-hex">#161b22</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#30363d;"></div>
+        <div class="swatch-label">border</div>
+        <div class="swatch-hex">#30363d</div>
+      </div>
+    </div>
+
+    <div class="section-label">Rich Theme Tokens</div>
+    <table class="token-table">
+      <thead>
+        <tr><th>Token</th><th>Rich Style</th><th>Purpose</th><th>Sample</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="token-name">xx.author</td>
+          <td class="token-value">bold</td>
+          <td>Tweet author name</td>
+          <td><span class="token-sample" style="font-weight:700;">Andrej Karpathy</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.handle</td>
+          <td class="token-value">dim</td>
+          <td>@username, timestamps</td>
+          <td><span class="token-sample" style="color:var(--text-muted);">@karpathy · 2h</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.content</td>
+          <td class="token-value">(default)</td>
+          <td>Tweet body text</td>
+          <td><span class="token-sample">The thing about...</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.metrics</td>
+          <td class="token-value">dim</td>
+          <td>Likes, RTs, replies</td>
+          <td><span class="token-sample" style="color:var(--text-dim);">847 likes · 234 RTs</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.accent</td>
+          <td class="token-value">cyan</td>
+          <td>Brand, interactive hints</td>
+          <td><span class="token-sample" style="color:var(--accent);">xx</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.success</td>
+          <td class="token-value">green</td>
+          <td>Confirmations</td>
+          <td><span class="token-sample" style="color:var(--success);">✓ Posted!</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.error</td>
+          <td class="token-value">red bold</td>
+          <td>Error titles</td>
+          <td><span class="token-sample" style="color:var(--error);font-weight:700;">✗ Rate limited</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.warning</td>
+          <td class="token-value">yellow</td>
+          <td>Warnings, confirmations</td>
+          <td><span class="token-sample" style="color:var(--warning);">⚠ 312 chars</span></td>
+        </tr>
+        <tr>
+          <td class="token-name">xx.key</td>
+          <td class="token-value">cyan on default</td>
+          <td>Keyboard shortcut hints</td>
+          <td><span class="token-sample" style="color:var(--accent);">[r]</span> <span style="color:var(--text-muted);">reply</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ IMPLEMENTATION NOTES ═══════════════ -->
+<p class="page-title">Implementation Notes</p>
+<p class="page-desc">How this translates to Rich + Python</p>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-title">xx — implementation</span>
+  </div>
+  <div class="terminal-body" style="font-size:12px;">
+    <div class="section-label">Rich Theme (centralized styles)</div>
+    <pre style="color:var(--text);line-height:1.6;"><span style="color:var(--text-muted);"># src/xxcli/theme.py</span>
+<span style="color:var(--info);">from</span> rich.theme <span style="color:var(--info);">import</span> Theme
+
+xx_theme = Theme({
+    <span style="color:var(--success);">"xx.author"</span>:  <span style="color:var(--success);">"bold"</span>,
+    <span style="color:var(--success);">"xx.handle"</span>:  <span style="color:var(--success);">"dim"</span>,
+    <span style="color:var(--success);">"xx.content"</span>: <span style="color:var(--success);">""</span>,
+    <span style="color:var(--success);">"xx.metrics"</span>: <span style="color:var(--success);">"dim"</span>,
+    <span style="color:var(--success);">"xx.accent"</span>:  <span style="color:var(--success);">"cyan"</span>,
+    <span style="color:var(--success);">"xx.success"</span>: <span style="color:var(--success);">"green"</span>,
+    <span style="color:var(--success);">"xx.error"</span>:   <span style="color:var(--success);">"red bold"</span>,
+    <span style="color:var(--success);">"xx.warning"</span>: <span style="color:var(--success);">"yellow"</span>,
+    <span style="color:var(--success);">"xx.key"</span>:     <span style="color:var(--success);">"cyan"</span>,
+    <span style="color:var(--success);">"xx.dim"</span>:     <span style="color:var(--success);">"dim"</span>,
+})
+
+console = Console(theme=xx_theme)</pre>
+
+    <div class="section-label">Pipe-Friendly Output</div>
+    <pre style="color:var(--text);line-height:1.6;"><span style="color:var(--text-muted);"># Respect NO_COLOR and TTY detection</span>
+<span style="color:var(--text-muted);"># Rich handles this automatically:</span>
+<span style="color:var(--text-muted);"># - Detects TTY, strips markup when piped</span>
+<span style="color:var(--text-muted);"># - Respects NO_COLOR env var</span>
+<span style="color:var(--text-muted);"># - force_terminal=False by default</span>
+
+console = Console(
+    theme=xx_theme,
+    highlight=<span style="color:var(--info);">False</span>,  <span style="color:var(--text-muted);"># no auto-highlighting</span>
+)</pre>
+
+    <div class="section-label">TUI Framework Direction</div>
+    <pre style="color:var(--text-muted);line-height:1.6;">Current: Rich (print-style output)
+Future:  Textual (full TUI, same ecosystem)
+
+Textual is built on Rich by the same team.
+Same theme tokens, same color system.
+Migration path: Rich panels → Textual widgets.
+The design system works for both.</pre>
+  </div>
+</div>
+
+<p style="text-align:center;color:var(--text-dim);font-size:11px;margin:40px 0;">
+  xx design system v1 · generated by /design-consultation · apr 2026
+</p>
+
+</body>
+</html>
