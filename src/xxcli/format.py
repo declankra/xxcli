@@ -210,8 +210,10 @@ def print_success(message: str):
     console.print(f"[xx.success]{message}[/xx.success]")
 
 
-def print_error(message: str):
-    console.print(f"[xx.error]Error:[/xx.error] {message}")
+def print_error(message: str, *, hint: str | None = None):
+    console.print(f"[xx.error]✗ {message}[/xx.error]")
+    if hint:
+        console.print(f"  [xx.dim]Hint: {hint}[/xx.dim]")
 
 
 def print_profile(user):

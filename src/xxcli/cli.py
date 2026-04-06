@@ -60,12 +60,14 @@ class DigestConfigError(RuntimeError):
 
 def _handle_api_error(e: tweepy.errors.TweepyException):
     if isinstance(e, tweepy.errors.Unauthorized):
-        print_error("Unauthorized (401). This endpoint may require a higher API tier.")
-        print_error("Free tier supports: post, feed, like, reply. User timeline requires Basic ($100/mo).")
+        print_error(
+            "Unauthorized (401)",
+            hint="This endpoint may require a higher API tier. Free tier supports: post, feed, like, reply. User timeline requires Basic ($100/mo).",
+        )
     elif isinstance(e, tweepy.errors.Forbidden):
-        print_error(f"Forbidden (403): {e}")
+        print_error(f"Forbidden (403)", hint=str(e))
     elif isinstance(e, tweepy.errors.TooManyRequests):
-        print_error("Rate limited. Wait a few minutes and try again.")
+        print_error("Rate limited", hint="Wait a few minutes and try again.")
     else:
         print_error(str(e))
     raise SystemExit(1)
@@ -435,5 +437,5 @@ def _fail(exc: Exception, *, exit_code: int, json_output: bool, code: str, fix: 
             err=True,
         )
     else:
-        print_error(str(exc))
+        print_error(str(exc), hint=fix)
     raise SystemExit(exit_code)
