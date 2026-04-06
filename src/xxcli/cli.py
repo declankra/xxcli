@@ -189,7 +189,8 @@ def digest(count, repo, since, debug, json_output, model, sample):
         repo_path = _resolve_repo_path(repo)
         _ensure_digest_credentials(sample=sample, json_output=json_output)
 
-        distillation_summary = _run_async(maybe_distill(str(repo_path), model=model))
+        with console.status("[xx.dim]Checking preferences...[/xx.dim]"):
+            distillation_summary = _run_async(maybe_distill(str(repo_path), model=model))
         if distillation_summary and not _wants_json(json_output):
             print_success(distillation_summary)
 
