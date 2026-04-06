@@ -61,7 +61,7 @@ async def run_digest(
     few_shot_str: str | None,
     since: datetime,
     count: int,
-    model: str = "gpt-4.1-mini",
+    model: str = "gpt-5.4-mini-2026-03-17",
     debug: bool = False,
     sample: bool = False,
 ) -> dict[str, Any]:

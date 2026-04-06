@@ -48,7 +48,7 @@ async def score_tweets(
     work_context: str,
     preference_rules: str | None = None,
     few_shot_examples: str | None = None,
-    model: str = "gpt-4.1-mini",
+    model: str = "gpt-5.4-mini-2026-03-17",
 ) -> DigestResult:
     """Score tweets for digest relevance with one retry on failure."""
     preference_section = _build_preference_section(preference_rules, few_shot_examples)
@@ -74,7 +74,7 @@ async def score_tweets(
 async def distill_preferences(
     feedback_signals: str,
     current_rules: str | None = None,
-    model: str = "gpt-4.1-mini",
+    model: str = "gpt-5.4-mini-2026-03-17",
 ) -> PreferenceRules:
     """Distill raw feedback into preference rules."""
     prompt = (

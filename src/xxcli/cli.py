@@ -184,7 +184,7 @@ def me(count):
 @click.option("--since", default="24h", help="Time window (e.g., 24h, 3d, 1w).", show_default=True)
 @click.option("--debug", is_flag=True, help="Show full LLM reasoning and timing.")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON.")
-@click.option("--model", default="gpt-4.1-mini", help="OpenAI model for scoring.", show_default=True)
+@click.option("--model", default="gpt-5.4-mini-2026-03-17", help="OpenAI model for scoring.", show_default=True)
 @click.option("--sample", is_flag=True, help="Use eval data instead of live API.")
 def digest(count, repo, since, debug, json_output, model, sample):
     """Score your feed against the repo you're actively building."""

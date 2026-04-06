@@ -112,7 +112,7 @@ def get_few_shot_examples(limit: int = 5) -> list[dict[str, str]]:
     return examples
 
 
-async def maybe_distill(context_repo: str, model: str = "gpt-4.1-mini") -> str | None:
+async def maybe_distill(context_repo: str, model: str = "gpt-5.4-mini-2026-03-17") -> str | None:
     """Distill preference rules when enough new signals have accumulated."""
     total_signals = get_signal_count()
     if total_signals < 20 or get_signals_since_last_distillation() < 10:
