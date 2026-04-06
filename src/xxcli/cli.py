@@ -181,14 +181,15 @@ def me(count):
 @click.option("--since", default="24h", help="Time window (e.g., 24h, 3d, 1w).", show_default=True)
 @click.option("--debug", is_flag=True, help="Show full LLM reasoning and timing.")
 @click.option("--json", "json_output", is_flag=True, help="Output as JSON.")
+@click.option("--model", default="gpt-4.1-mini", help="OpenAI model for scoring.", show_default=True)
 @click.option("--sample", is_flag=True, help="Use eval data instead of live API.")
-def digest(count, repo, since, debug, json_output, sample):
+def digest(count, repo, since, debug, json_output, model, sample):
     """Score your feed against the repo you're actively building."""
     try:
         repo_path = _resolve_repo_path(repo)
         _ensure_digest_credentials(sample=sample, json_output=json_output)
 
-        distillation_summary = _run_async(maybe_distill(str(repo_path)))
+        distillation_summary = _run_async(maybe_distill(str(repo_path), model=model))
         if distillation_summary and not _wants_json(json_output):
             print_success(distillation_summary)
 
@@ -215,6 +216,7 @@ def digest(count, repo, since, debug, json_output, sample):
                     few_shot_str=few_shot_examples,
                     since=since_dt,
                     count=count,
+                    model=model,
                     debug=debug,
                     sample=sample,
                 )
