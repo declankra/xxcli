@@ -258,3 +258,35 @@ FIRST RUN: xx digest (or xx setup)
      ├─── Phase 4: First digest with calibrated context
      └─── Save all to ~/.xxcli/config.yaml (wizard-populated)
 ```
+
+## DX Review Additions (from /plan-devex-review)
+
+These items were added during the DX review, not in the original CEO plan:
+
+1. **Credential wizard as Phase 0** — setup wizard starts with credential collection + validation before repo selection
+2. **`--json` flag + auto-detect pipe** — machine-readable output for AI agents (GitHub CLI pattern)
+3. **`.claude/skills/xx-digest/SKILL.md`** — agent discovery wrapper ships with repo
+4. **`parse_tweet_id()` strips `id:` prefix** — handles digest output format
+5. **Error message formula** — every error: what + why + fix + actual values
+6. **JSON errors on stderr** — `{"error": {"code", "message", "fix"}}` when `--json` active
+7. **README update promoted to Step 5** — before tests, not after
+8. **`--sample` flag** — loads eval data for dev testing without API calls
+9. **TTHW timing in wizard** — records setup duration for distribution analytics
+10. **Exit codes** — 0=success, 1=config, 2=API, 3=LLM
+11. **Updated setup wizard flow** — Phase 0 (credentials) → Phase 1 (repo) → Phase 2 (docs) → Phase 3 (calibrate) → Phase 4 (first digest)
+
+Full DX review: `docs/designs/xx-digest-dx-review.md`
+
+## GSTACK REVIEW REPORT
+
+| Review | Trigger | Why | Runs | Status | Findings |
+|--------|---------|-----|------|--------|----------|
+| CEO Review | `/plan-ceo-review` | Scope & strategy | 1 | CLEAR | 8 proposals, 7 accepted, 0 deferred |
+| Codex Review | `/codex review` | Independent 2nd opinion | 2 | ISSUES FOUND | 15 findings in DX review, 4 tensions resolved |
+| Eng Review | `/plan-eng-review` | Architecture & tests (required) | 1 | CLEAR | 8 issues, 0 critical gaps |
+| Design Review | `/plan-design-review` | UI/UX gaps | 1 | CLEAR | score: 6/10 → 8/10, 12 decisions |
+| DX Review | `/plan-devex-review` | Developer experience gaps | 1 | CLEAR | score: 5/10 → 7/10, 14 decisions |
+
+- **OUTSIDE VOICE:** Codex plan review ran twice (eng review + DX review). 15 findings in DX pass, 4 substantive tensions resolved (token budget deferred, taxonomy kept, cache rejected, eval shipped as-is).
+- **UNRESOLVED:** 0
+- **VERDICT:** CEO + ENG + DESIGN + DX CLEARED — ready to implement.
