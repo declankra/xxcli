@@ -7,6 +7,8 @@ import json
 from typing import Any
 
 from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
 
 from xxcli.theme import xx_theme
 
@@ -45,7 +47,7 @@ def _metrics_line(metrics: dict) -> str:
     return "  ".join(parts) if parts else ""
 
 
-def _format_author(name: str, username: str, time_str: str) -> str:
+def format_author(name: str, username: str, time_str: str) -> str:
     name_part = f"[xx.author]{name}[/xx.author]" if name else "[xx.author]Unknown[/xx.author]"
     handle_part = f"[xx.handle]@{username}[/xx.handle]" if username else "[xx.handle]@unknown[/xx.handle]"
     time_part = f" [xx.handle]· {time_str}[/xx.handle]" if time_str else ""
@@ -54,18 +56,18 @@ def _format_author(name: str, username: str, time_str: str) -> str:
 
 def print_tweet(tweet, author_name: str = "", author_username: str = "", index: int | None = None):
     """Print a single tweet with formatting."""
-    prefix = f"[xx.dim]{index}.[/xx.dim] " if index is not None else ""
     time_str = _relative_time(tweet.created_at) if getattr(tweet, "created_at", None) else ""
-    console.print(f"{prefix}{_format_author(author_name, author_username, time_str)}")
-    console.print(f"  [xx.content]{tweet.text}[/xx.content]")
+    header = format_author(author_name, author_username, time_str)
 
+    lines = [f"[xx.content]{tweet.text}[/xx.content]"]
     if getattr(tweet, "public_metrics", None):
         metrics = _metrics_line(tweet.public_metrics)
         if metrics:
-            console.print(f"  [xx.metrics]{metrics}[/xx.metrics]")
+            lines.append(f"[xx.metrics]{metrics}[/xx.metrics]")
+    lines.append(f"[xx.dim]id:{tweet.id}[/xx.dim]")
 
-    console.print(f"  [xx.dim]id:{tweet.id}[/xx.dim]")
-    console.print()
+    title = f"[xx.dim]{index}.[/xx.dim] {header}" if index is not None else header
+    console.print(Panel("\n".join(lines), title=title, title_align="left", border_style="dim", padding=(0, 1)))
 
 
 def print_feed(tweets, users: dict):
@@ -94,39 +96,48 @@ def print_my_tweets(tweets, username: str, name: str):
 def print_digest(items, meta, active_console: Console | None = None):
     active_console = active_console or console
     pct_noise = int((meta["filtered"] / meta["within_since"]) * 100) if meta.get("within_since") else 0
-    active_console.print(
-        f"[bold]xx digest[/bold] [xx.dim]—[/xx.dim] [bold]{len(items)}[/bold] signals"
-    )
-    active_console.print(f"[xx.dim]{pct_noise}% of your timeline was noise.[/xx.dim]")
 
     context_bits = []
     if meta.get("repo"):
         context_bits.append(meta["repo"])
     if meta.get("since"):
         context_bits.append(f"since {meta['since']}")
-    if context_bits:
-        active_console.print(f"[xx.dim]{' · '.join(context_bits)}[/xx.dim]")
-    active_console.print()
+    subtitle = f"[xx.dim]{' · '.join(context_bits)}[/xx.dim]" if context_bits else ""
 
-    tag_styles = {"adopt": "xx.success", "avoid": "xx.error", "copy": "xx.accent"}
+    active_console.print(Panel(
+        f"[bold]{len(items)}[/bold] signals  [xx.dim]·  {pct_noise}% of your timeline was noise[/xx.dim]",
+        title="[xx.accent]xx digest[/xx.accent]",
+        subtitle=subtitle,
+        title_align="left",
+        subtitle_align="left",
+        border_style="cyan",
+        padding=(0, 1),
+    ))
+
+    tag_styles = {"adopt": "green", "avoid": "red", "copy": "cyan"}
     for index, item in enumerate(items, 1):
         tag = item["classification"].upper()
-        tag_style = tag_styles.get(item["classification"], "xx.dim")
+        tag_style = tag_styles.get(item["classification"], "dim")
+        border_style = tag_styles.get(item["classification"], "dim")
         time_str = ""
         if item.get("created_at"):
             created = datetime.fromisoformat(item["created_at"].replace("Z", "+00:00"))
             time_str = _relative_time(created)
 
-        active_console.print(f"[xx.dim]{index}.[/xx.dim] [{tag_style}]{tag}[/{tag_style}]")
-        active_console.print(
-            f"  {_format_author(item.get('author_name', ''), item.get('author_username', ''), time_str)}"
-        )
-        active_console.print(f"  [xx.content]{item.get('text', '')}[/xx.content]")
-        active_console.print(
-            f"  [xx.dim]Why:[/xx.dim] {item.get('explanation', '')}"
-        )
-        active_console.print(f"  [xx.dim]id:{item['tweet_id']}[/xx.dim]")
-        active_console.print()
+        header = format_author(item.get("author_name", ""), item.get("author_username", ""), time_str)
+        body_lines = [
+            f"[xx.content]{item.get('text', '')}[/xx.content]",
+            f"[xx.dim]Why:[/xx.dim] {item.get('explanation', '')}",
+            f"[xx.dim]id:{item['tweet_id']}[/xx.dim]",
+        ]
+        title = f"[xx.dim]{index}.[/xx.dim] [{tag_style}]{tag}[/{tag_style}]  {header}"
+        active_console.print(Panel(
+            "\n".join(body_lines),
+            title=title,
+            title_align="left",
+            border_style=border_style,
+            padding=(0, 1),
+        ))
 
     active_console.print("[xx.dim]Run xx like <id> or xx reply <id> \"text\" to interact.[/xx.dim]")
     if meta.get("streak_days", 0) > 1:
@@ -172,9 +183,13 @@ def print_debug_info(debug_info, active_console: Console | None = None):
 
 def print_empty_digest(meta, active_console: Console | None = None):
     active_console = active_console or console
-    active_console.print("  [xx.dim]○ No relevant signals in this window[/xx.dim]")
     repo = meta.get("repo") or "your repo"
-    active_console.print(f"  [xx.dim]Try a wider --since window or switch repo context from {repo}.[/xx.dim]")
+    active_console.print(Panel(
+        f"[xx.dim]○ No relevant signals in this window\n"
+        f"Try a wider --since window or switch repo context from {repo}.[/xx.dim]",
+        border_style="dim",
+        padding=(0, 1),
+    ))
 
 
 def print_filtered_items(items, active_console: Console | None = None):

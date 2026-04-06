@@ -31,6 +31,7 @@ from xxcli.digest import load_last_digest, load_sample_tweets, parse_since, run_
 from xxcli.feedback import get_few_shot_examples, load_preference_rules, log_signal, maybe_distill
 from xxcli.format import (
     console,
+    format_author,
     print_debug_info,
     print_digest,
     print_digest_json,
@@ -316,23 +317,40 @@ def why(tweet_id_or_url):
         print_error(f"Tweet {tweet_id} is not in the last cached digest.")
         raise SystemExit(1)
 
+    from rich.panel import Panel
+
     meta = cached.get("meta", {})
-    console.print(f"[xx.author]{item.get('author_name') or 'Unknown'}[/xx.author] [xx.handle]@{item.get('author_username') or 'unknown'}[/xx.handle]")
-    console.print(item.get("text", ""))
-    console.print()
-    console.print(
-        f"[xx.dim]Score:[/xx.dim] {item.get('relevance_score')}  "
-        f"[xx.dim]Classification:[/xx.dim] {item.get('classification')}"
+    tag_styles = {"adopt": "green", "avoid": "red", "copy": "cyan"}
+    classification = item.get("classification", "skip")
+    border = tag_styles.get(classification, "dim")
+    header = format_author(
+        item.get("author_name") or "Unknown",
+        item.get("author_username") or "unknown",
+        "",
     )
-    console.print(f"[xx.dim]Why:[/xx.dim] {item.get('explanation') or '(no explanation)'}")
+    body_lines = [
+        f"[xx.content]{item.get('text', '')}[/xx.content]",
+        "",
+        f"[xx.dim]Score:[/xx.dim] {item.get('relevance_score')}  "
+        f"[xx.dim]Classification:[/xx.dim] {classification.upper()}",
+        f"[xx.dim]Why:[/xx.dim] {item.get('explanation') or '(no explanation)'}",
+    ]
     if meta.get("work_context"):
-        console.print()
-        console.print("[xx.info]Matched work context[/xx.info]")
-        console.print(meta["work_context"])
+        body_lines.append("")
+        body_lines.append("[xx.info]Matched work context[/xx.info]")
+        body_lines.append(meta["work_context"])
     if meta.get("preference_rules"):
-        console.print()
-        console.print("[xx.info]Current preference rules[/xx.info]")
-        console.print(json.dumps(meta["preference_rules"], ensure_ascii=False, indent=2))
+        body_lines.append("")
+        body_lines.append("[xx.info]Current preference rules[/xx.info]")
+        body_lines.append(json.dumps(meta["preference_rules"], ensure_ascii=False, indent=2))
+
+    console.print(Panel(
+        "\n".join(body_lines),
+        title=header,
+        title_align="left",
+        border_style=border,
+        padding=(0, 1),
+    ))
 
 
 @main.command()
