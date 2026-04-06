@@ -32,7 +32,7 @@ cd xxcli
 pip install -e .
 ```
 
-> Requires **Python 3.10+** and a Twitter/X API key with OAuth 1.0a User Context.
+> Requires **Python 3.10+**, an OpenAI API key for digest scoring, and a Twitter/X API key with OAuth 1.0a User Context for live timeline pulls.
 
 <details>
 <summary><strong>API credentials</strong></summary>
@@ -46,9 +46,10 @@ export X_API_KEY="your-api-key"
 export X_API_SECRET="your-api-secret"
 export X_ACCESS_TOKEN="your-access-token"
 export X_ACCESS_TOKEN_SECRET="your-access-token-secret"
+export OPENAI_API_KEY="your-openai-api-key"
 ```
 
-You need a [Twitter Developer account](https://developer.twitter.com/) with at least Free tier access. The Free tier supports posting and reading your home timeline.
+You need a [Twitter Developer account](https://developer.twitter.com/) with at least Free tier access. The Free tier supports posting and reading your home timeline. The digest commands also need an OpenAI API key for scoring.
 
 </details>
 
@@ -63,6 +64,19 @@ You need a [Twitter Developer account](https://developer.twitter.com/) with at l
 | `xx reply` | `xx reply 123456789 "great point"` | Reply by tweet ID or URL |
 | `xx like` | `xx like 123456789` | Like by tweet ID or URL |
 | `xx me` | `xx me -n 20` | See your own tweets (default: 10) |
+| `xx setup` | `xx setup` | Run the digest setup wizard |
+| `xx digest` | `xx digest --sample --debug` | Score your feed against the repo you are building |
+| `xx why` | `xx why 1234567890` | Explain the last cached digest score for a tweet |
+| `xx signal` | `xx signal "interested in agent architecture"` | Manually inject a preference signal |
+
+### Digest quick start
+
+```bash
+xx setup
+xx digest
+xx digest --json
+xx digest --sample --debug
+```
 
 ---
 

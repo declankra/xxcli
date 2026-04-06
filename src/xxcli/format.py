@@ -1,11 +1,16 @@
 """Terminal output formatting with Rich."""
 
+from __future__ import annotations
+
 from datetime import datetime, timezone
+import json
+from typing import Any
 
 from rich.console import Console
-from rich.text import Text
 
-console = Console()
+from xxcli.theme import xx_theme
+
+console = Console(theme=xx_theme, highlight=False)
 
 
 def _relative_time(dt: datetime) -> str:
@@ -32,47 +37,41 @@ def _metrics_line(metrics: dict) -> str:
     rts = metrics.get("retweet_count", 0)
     replies = metrics.get("reply_count", 0)
     if likes:
-        parts.append(f"[red]{likes}[/red] likes")
+        parts.append(f"{likes} likes")
     if rts:
-        parts.append(f"[green]{rts}[/green] RTs")
+        parts.append(f"{rts} RTs")
     if replies:
-        parts.append(f"[blue]{replies}[/blue] replies")
+        parts.append(f"{replies} replies")
     return "  ".join(parts) if parts else ""
+
+
+def _format_author(name: str, username: str, time_str: str) -> str:
+    name_part = f"[xx.author]{name}[/xx.author]" if name else "[xx.author]Unknown[/xx.author]"
+    handle_part = f"[xx.handle]@{username}[/xx.handle]" if username else "[xx.handle]@unknown[/xx.handle]"
+    time_part = f" [xx.handle]· {time_str}[/xx.handle]" if time_str else ""
+    return f"{name_part} {handle_part}{time_part}"
 
 
 def print_tweet(tweet, author_name: str = "", author_username: str = "", index: int | None = None):
     """Print a single tweet with formatting."""
-    prefix = f"[dim]{index}.[/dim] " if index is not None else ""
+    prefix = f"[xx.dim]{index}.[/xx.dim] " if index is not None else ""
+    time_str = _relative_time(tweet.created_at) if getattr(tweet, "created_at", None) else ""
+    console.print(f"{prefix}{_format_author(author_name, author_username, time_str)}")
+    console.print(f"  [xx.content]{tweet.text}[/xx.content]")
 
-    # Author line
-    if author_username:
-        author = f"[bold]{author_name}[/bold] [dim]@{author_username}[/dim]"
-    else:
-        author = f"[dim]@unknown[/dim]"
-
-    # Time
-    time_str = ""
-    if tweet.created_at:
-        time_str = f" [dim]· {_relative_time(tweet.created_at)}[/dim]"
-
-    console.print(f"{prefix}{author}{time_str}")
-    console.print(f"  {tweet.text}")
-
-    # Metrics
-    if tweet.public_metrics:
+    if getattr(tweet, "public_metrics", None):
         metrics = _metrics_line(tweet.public_metrics)
         if metrics:
-            console.print(f"  {metrics}")
+            console.print(f"  [xx.metrics]{metrics}[/xx.metrics]")
 
-    # Tweet ID for reference
-    console.print(f"  [dim]id:{tweet.id}[/dim]")
+    console.print(f"  [xx.dim]id:{tweet.id}[/xx.dim]")
     console.print()
 
 
 def print_feed(tweets, users: dict):
     """Print a list of tweets as a feed."""
     if not tweets:
-        console.print("[dim]No tweets found.[/dim]")
+        console.print("[xx.dim]No tweets found.[/xx.dim]")
         return
 
     for i, tweet in enumerate(tweets, 1):
@@ -85,31 +84,131 @@ def print_feed(tweets, users: dict):
 def print_my_tweets(tweets, username: str, name: str):
     """Print user's own tweets."""
     if not tweets:
-        console.print("[dim]No tweets found.[/dim]")
+        console.print("[xx.dim]No tweets found.[/xx.dim]")
         return
 
     for i, tweet in enumerate(tweets, 1):
         print_tweet(tweet, author_name=name, author_username=username, index=i)
 
 
+def print_digest(items, meta, active_console: Console | None = None):
+    active_console = active_console or console
+    pct_noise = int((meta["filtered"] / meta["within_since"]) * 100) if meta.get("within_since") else 0
+    active_console.print(
+        f"[bold]xx digest[/bold] [xx.dim]—[/xx.dim] [bold]{len(items)}[/bold] signals"
+    )
+    active_console.print(f"[xx.dim]{pct_noise}% of your timeline was noise.[/xx.dim]")
+
+    context_bits = []
+    if meta.get("repo"):
+        context_bits.append(meta["repo"])
+    if meta.get("since"):
+        context_bits.append(f"since {meta['since']}")
+    if context_bits:
+        active_console.print(f"[xx.dim]{' · '.join(context_bits)}[/xx.dim]")
+    active_console.print()
+
+    tag_styles = {"adopt": "xx.success", "avoid": "xx.error", "copy": "xx.accent"}
+    for index, item in enumerate(items, 1):
+        tag = item["classification"].upper()
+        tag_style = tag_styles.get(item["classification"], "xx.dim")
+        time_str = ""
+        if item.get("created_at"):
+            created = datetime.fromisoformat(item["created_at"].replace("Z", "+00:00"))
+            time_str = _relative_time(created)
+
+        active_console.print(f"[xx.dim]{index}.[/xx.dim] [{tag_style}]{tag}[/{tag_style}]")
+        active_console.print(
+            f"  {_format_author(item.get('author_name', ''), item.get('author_username', ''), time_str)}"
+        )
+        active_console.print(f"  [xx.content]{item.get('text', '')}[/xx.content]")
+        active_console.print(
+            f"  [xx.dim]Why:[/xx.dim] {item.get('explanation', '')}"
+        )
+        active_console.print(f"  [xx.dim]id:{item['tweet_id']}[/xx.dim]")
+        active_console.print()
+
+    active_console.print("[xx.dim]Run xx like <id> or xx reply <id> \"text\" to interact.[/xx.dim]")
+    if meta.get("streak_days", 0) > 1:
+        active_console.print(f"[xx.dim]Streak: {meta['streak_days']} days[/xx.dim]")
+
+
+def print_digest_json(items, meta):
+    json_items = [
+        {
+            "tweet_id": item["tweet_id"],
+            "relevance_score": item["relevance_score"],
+            "classification": item["classification"],
+            "author": f"@{item.get('author_username', '')}" if item.get("author_username") else item.get("author_name", ""),
+            "text": item.get("text", ""),
+            "explanation": item.get("explanation", ""),
+        }
+        for item in items
+    ]
+    json_meta = {
+        "scanned": meta.get("scanned", 0),
+        "filtered": meta.get("filtered", 0),
+        "repo": meta.get("repo"),
+        "streak_days": meta.get("streak_days", 0),
+        "since": meta.get("since"),
+    }
+    console.print_json(json.dumps({"items": json_items, "meta": json_meta}))
+
+
+def print_debug_info(debug_info, active_console: Console | None = None):
+    active_console = active_console or console
+    if not debug_info:
+        return
+    active_console.print("[xx.dim]Debug[/xx.dim]")
+    if debug_info.get("timing"):
+        for phase, duration in debug_info["timing"].items():
+            active_console.print(f"[xx.dim]  {phase}: {duration:.2f}s[/xx.dim]")
+    score_run = debug_info.get("score_run")
+    if score_run:
+        active_console.print(f"[xx.dim]  model: {score_run.get('model')}[/xx.dim]")
+        active_console.print("[xx.dim]  prompt and raw responses captured for inspection.[/xx.dim]")
+    active_console.print()
+
+
+def print_empty_digest(meta, active_console: Console | None = None):
+    active_console = active_console or console
+    active_console.print("  [xx.dim]○ No relevant signals in this window[/xx.dim]")
+    repo = meta.get("repo") or "your repo"
+    active_console.print(f"  [xx.dim]Try a wider --since window or switch repo context from {repo}.[/xx.dim]")
+
+
+def print_filtered_items(items, active_console: Console | None = None):
+    active_console = active_console or console
+    if not items:
+        active_console.print("[xx.dim]No filtered items to review.[/xx.dim]")
+        return
+    active_console.print("[xx.info]Filtered items[/xx.info]")
+    for item in items:
+        active_console.print(
+            f"  [xx.dim]id:{item['tweet_id']}[/xx.dim] "
+            f"[xx.handle]@{item.get('author_username', '')}[/xx.handle] "
+            f"{item.get('text', '')}"
+        )
+
+
 def print_success(message: str):
-    console.print(f"[green]{message}[/green]")
+    console.print(f"[xx.success]{message}[/xx.success]")
 
 
 def print_error(message: str):
-    console.print(f"[red]Error:[/red] {message}")
+    console.print(f"[xx.error]Error:[/xx.error] {message}")
 
 
 def print_profile(user):
     """Print user profile info."""
-    console.print(f"[bold]{user.name}[/bold] [dim]@{user.username}[/dim]")
+    console.print(f"[xx.author]{user.name}[/xx.author] [xx.handle]@{user.username}[/xx.handle]")
     if user.description:
-        console.print(f"  {user.description}")
+        console.print(f"  [xx.content]{user.description}[/xx.content]")
     m = user.public_metrics
     if m:
         console.print(
-            f"  [dim]{m['followers_count']} followers · "
+            f"  [xx.metrics]{m['followers_count']} followers · "
             f"{m['following_count']} following · "
-            f"{m['tweet_count']} tweets[/dim]"
+            f"{m['tweet_count']} tweets[/xx.metrics]"
         )
     console.print()

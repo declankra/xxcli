@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "xxcli"
-version = "0.1.0"
+version = "0.2.0"
 description = "A CLI for consuming and contributing to Twitter/X without opening the browser."
 readme = "README.md"
 license = {text = "MIT"}
@@ -23,6 +23,8 @@ dependencies = [
     "tweepy>=4.14",
     "click>=8.0",
     "rich>=13.0",
+    "openai-agents>=0.1",
+    "pyyaml>=6.0",
 ]
 
 [project.scripts]
@@ -35,3 +37,6 @@ Issues = "https://github.com/declankra/xxcli/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"

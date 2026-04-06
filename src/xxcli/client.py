@@ -6,20 +6,35 @@ from pathlib import Path
 
 import tweepy
 
+from xxcli.config import load_config
+
 
 def _get_credentials():
-    keys = {
+    env_keys = {
         "consumer_key": os.environ.get("X_API_KEY"),
         "consumer_secret": os.environ.get("X_API_SECRET"),
         "access_token": os.environ.get("X_ACCESS_TOKEN"),
         "access_token_secret": os.environ.get("X_ACCESS_TOKEN_SECRET"),
     }
-    missing = [k for k, v in keys.items() if not v]
+    if all(env_keys.values()):
+        return env_keys
+
+    stored = load_config().get("credentials", {})
+    config_keys = {
+        "consumer_key": stored.get("x_api_key") if isinstance(stored, dict) else None,
+        "consumer_secret": stored.get("x_api_secret") if isinstance(stored, dict) else None,
+        "access_token": stored.get("x_access_token") if isinstance(stored, dict) else None,
+        "access_token_secret": stored.get("x_access_token_secret") if isinstance(stored, dict) else None,
+    }
+    if all(config_keys.values()):
+        return config_keys
+
+    missing = [k for k, v in env_keys.items() if not v]
     if missing:
         print("Missing Twitter API credentials. Set these env vars:", file=sys.stderr)
         print("  X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET", file=sys.stderr)
         sys.exit(1)
-    return keys
+    return env_keys
 
 
 def get_client() -> tweepy.Client:
@@ -52,8 +67,8 @@ def get_me(client: tweepy.Client):
 def get_home_timeline(client: tweepy.Client, count: int = 20):
     resp = client.get_home_timeline(
         max_results=min(count, 100),
-        tweet_fields=["created_at", "public_metrics", "author_id", "conversation_id"],
-        expansions=["author_id"],
+        tweet_fields=["created_at", "public_metrics", "author_id", "conversation_id", "referenced_tweets"],
+        expansions=["author_id", "referenced_tweets.id"],
         user_fields=["username", "name"],
     )
     users = {}
@@ -101,8 +116,15 @@ def like_tweet(client: tweepy.Client, tweet_id: str):
 
 def parse_tweet_id(tweet_id_or_url: str) -> str:
     """Extract tweet ID from a URL or return as-is if already an ID."""
+    if tweet_id_or_url.startswith("id:"):
+        tweet_id_or_url = tweet_id_or_url[3:]
     if "/" in tweet_id_or_url:
         # Handle URLs like https://x.com/user/status/123456
         parts = tweet_id_or_url.rstrip("/").split("/")
         return parts[-1]
     return tweet_id_or_url
+
+
+def get_client_from_config() -> tweepy.Client:
+    """Create a client using env vars first, then ~/.xxcli/config.yaml."""
+    return get_client()

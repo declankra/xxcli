@@ -1,0 +1,86 @@
+[
+  {
+    "tweet_id": "2037612219228426491",
+    "author_username": "AutismCapital",
+    "label": "discard",
+    "note": "No actionable relevance to the repo."
+  },
+  {
+    "tweet_id": "2037611963983757761",
+    "author_username": "pvncher",
+    "label": "discard",
+    "note": "Interesting tool mention but not helpful for the current work."
+  },
+  {
+    "tweet_id": "2037611771889086747",
+    "author_username": "AutismCapital",
+    "label": "discard",
+    "note": "Entertainment content only."
+  },
+  {
+    "tweet_id": "2037611306950230086",
+    "author_username": "zebulgar",
+    "label": "discard",
+    "note": "Interesting topic but not actionable enough."
+  },
+  {
+    "tweet_id": "2037610983129268674",
+    "author_username": "patrickc",
+    "label": "keep",
+    "note": "Agent-native service catalog direction is directly relevant."
+  },
+  {
+    "tweet_id": "2037610514252001683",
+    "author_username": "Dimillian",
+    "label": "discard",
+    "note": "Codex is relevant, but the iOS/macOS angle is not."
+  },
+  {
+    "tweet_id": "2037610000122839116",
+    "author_username": "sama",
+    "label": "discard",
+    "note": "General infrastructure news with no repo connection."
+  },
+  {
+    "tweet_id": "2037609982015807757",
+    "author_username": "Dimillian",
+    "label": "keep",
+    "note": "Potential imagination-spiking Codex examples."
+  },
+  {
+    "tweet_id": "2037609191599411200",
+    "author_username": "theo",
+    "label": "discard",
+    "note": "Reaction tweet without useful perspective."
+  },
+  {
+    "tweet_id": "2037608941052678596",
+    "author_username": "nullpointered",
+    "label": "discard",
+    "note": "Interesting doom-scroll content, but not actionable."
+  },
+  {
+    "tweet_id": "2037608433961033882",
+    "author_username": "mattshumer_",
+    "label": "discard",
+    "note": "Pure hype on top of already-known news."
+  },
+  {
+    "tweet_id": "2037608395759374757",
+    "author_username": "leojrr",
+    "label": "discard",
+    "note": "Clickbait update to a product outside the repo's workflow."
+  },
+  {
+    "tweet_id": "2037608289156882519",
+    "author_username": "levelsio",
+    "label": "discard",
+    "note": "Health/fitness interest is too tangential."
+  },
+  {
+    "tweet_id": "2037606570356347028",
+    "author_username": "stats_feed",
+    "label": "discard",
+    "note": "Serendipity-adjacent but too stretched for the current work."
+  }
+]

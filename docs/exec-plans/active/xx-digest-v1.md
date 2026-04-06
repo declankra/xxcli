@@ -12,18 +12,40 @@ To see it working after implementation: run `xx digest` from a git repo with `OP
 
 ## Progress
 
-- [ ] Milestone 1: Foundation (config.py, context.py, theme.py)
-- [ ] Milestone 2: LLM agents (llm.py, Pydantic models)
-- [ ] Milestone 3: Digest engine (digest.py)
-- [ ] Milestone 4: Feedback system (feedback.py)
-- [ ] Milestone 5: Setup wizard (onboarding.py)
-- [ ] Milestone 6: CLI wiring (cli.py, format.py, client.py)
-- [ ] Milestone 7: Agent interface (--json, SKILL.md, exit codes)
-- [ ] Milestone 8: Tests, eval, README, version bump
+- [x] Milestone 1: Foundation (config.py, context.py, theme.py) completed and verified with direct module imports. 2026-04-06 10:13 CDT
+- [x] Milestone 2: LLM agents (llm.py, Pydantic models) completed and verified with `DigestResult(items=[]).model_dump_json()`. 2026-04-06 10:16 CDT
+- [x] Milestone 3: Digest engine (digest.py) completed and verified with `run_digest(..., sample=True, debug=True)` against the checked-in eval fixture. 2026-04-06 10:19 CDT
+- [x] Milestone 4: Feedback system (feedback.py) completed and verified with a real append/read round-trip against `~/.xxcli/feedback.jsonl`. 2026-04-06 10:21 CDT
+- [x] Milestone 5: Setup wizard (onboarding.py) implemented and helper paths verified (`scan_for_repos()`, calibration response mapping). Full `xx setup` verification deferred to CLI wiring milestone. 2026-04-06 10:23 CDT
+- [x] Milestone 6: CLI wiring (cli.py, format.py, client.py) completed and verified with `xx setup --help`, `xx digest --json --sample`, and TTY `xx digest --sample --debug`. 2026-04-06 10:29 CDT
+- [x] Milestone 7: Agent interface (--json, SKILL.md, exit codes) completed and verified with compact JSON output plus JSON stderr on config failure. 2026-04-06 10:31 CDT
+- [x] Milestone 8: Tests, eval, README, and version bump completed. Verified with `python3 -m pytest tests/ -v` (16 passed) and TTY `xx digest --sample --debug`. 2026-04-06 10:32 CDT
 
 ## Surprises & Discoveries
 
-(Populated during implementation.)
+- Observation: The local shell environment has `python3` available but no `python` shim.
+  Evidence: `python` exited with `zsh:1: command not found: python`, while `PYTHONPATH=src python3 ...` imported the new modules successfully.
+
+- Observation: Keeping the OpenAI Agents SDK imports lazy avoids making pure-model verification depend on the SDK being installed or configured.
+  Evidence: `PYTHONPATH=src python3` imported `DigestItem` and `DigestResult` and serialized them without importing `agents` at module import time.
+
+- Observation: The checked-in eval markdown currently contains 14 tweet blocks, not the 19 described in the plan text.
+  Evidence: `load_sample_tweets()` parsed 14 tweets after fixing the multiline header regex, and `rg '^[0-9]+\\.'` only finds 14 tweet headers plus the numbered list inside the final tweet body.
+
+- Observation: The current feedback schema does not include raw tweet text, so phase-1 few-shot examples must be synthesized from tweet id, score, and signal metadata.
+  Evidence: `feedback.jsonl` records only persist `tweet_id`, `score`, `classification`, `digest_run_id`, `context_repo`, and optional `items_shown`.
+
+- Observation: The wizard can be implemented before CLI wiring, but the plan's stated verification command (`xx setup`) only becomes runnable once milestone 6 lands.
+  Evidence: `run_setup_wizard()` and repo-scan helpers import and work, but there is no `setup` Click command until the CLI milestone.
+
+- Observation: The current sample fixture plus the repo's live work context is exercising the empty digest state, not a populated 3-5 item digest.
+  Evidence: Both `xx digest --json --sample` and the TTY `xx digest --sample --debug` run successfully but return zero `relevance_score >= 7` items for the current repo context.
+
+- Observation: Using a temporary `HOME` to simulate a missing config breaks the user-site `xx` console script import path, but unsetting `OPENAI_API_KEY` against the normal home directory cleanly exercises the JSON error path.
+  Evidence: `HOME=$(mktemp -d) xx ...` raised `ModuleNotFoundError: No module named 'xxcli'`, while `env -u OPENAI_API_KEY xx digest --json --sample` returned the expected JSON error envelope.
+
+- Observation: The local Python environment did not have `pytest` installed, and the editable install placed the `xx` console script in `~/Library/Python/3.11/bin`, which is not on PATH by default.
+  Evidence: `python3 -m pytest tests/ -v` initially failed with `No module named pytest`, and `pip install -e .` warned that `xx` was installed outside PATH.
 
 ## Decision Log
 
@@ -47,9 +69,38 @@ All decisions below were made during the design and review pipeline (office-hour
 - Decision: Exit codes 0=success, 1=config error, 2=API error, 3=LLM error.
   Rationale: Agents can programmatically distinguish error types and decide whether to retry.
 
+- Decision: Use `python3` for local verification commands during implementation, while keeping user-facing docs aligned with the intended Python CLI flow.
+  Rationale: This development machine does not expose a `python` executable, so using `python3` is the only way to run milestone verification here without changing product behavior.
+
+- Decision: Keep `agents` imports inside helper functions in `llm.py` instead of importing the SDK at module import time.
+  Rationale: The milestone's verification path only needs the Pydantic models. Lazy imports keep those paths testable and reduce failure modes during non-networked unit tests.
+
+- Decision: In `sample` mode, bypass the real-time `since` filter and always score the full eval fixture.
+  Rationale: The sample dataset is historical. Applying a live `24h` cutoff turns `xx digest --sample` into an empty-path test instead of exercising the intended eval workflow.
+
+- Decision: Treat the checked-in eval markdown as the current source of truth and adjust later tests/eval assets to the actual 14 parsed tweets unless the missing 5 tweets are recovered.
+  Rationale: The repository artifact is internally inconsistent with the plan text. Shipping against the real file keeps the sample path reproducible today.
+
+- Decision: Only run preference distillation after at least 20 explicit signals exist and at least 10 new distillation-relevant signals have arrived since the last rule file update.
+  Rationale: This preserves the intended phase split between early few-shot behavior and later distilled-rule behavior, instead of generating brittle rules from the first few feedback clicks.
+
+- Decision: Verify onboarding incrementally through non-interactive helpers before the command exists, then cover the full interactive `xx setup` path after CLI wiring.
+  Rationale: This keeps milestones ordered without blocking wizard work on command registration details that belong to the next milestone.
+
+- Decision: Allow `xx digest --sample` to proceed with only an OpenAI key; require X credentials only for live timeline pulls.
+  Rationale: The sample path exists specifically to exercise the digest engine and agent interface without needing live X access, which is essential for local verification and CI-style checks.
+
+- Decision: Keep the full work context only in the cached `last_digest.json` payload and emit a compact, documented subset in `--json` output.
+  Rationale: Agents need a small stable schema. The full context is still necessary for `xx why`, but it should not bloat machine-readable digest responses.
+
+- Decision: Use `PATH="$HOME/Library/Python/3.11/bin:$PATH"` for local command verification instead of modifying shell startup files during implementation.
+  Rationale: The console script is installed in the user site bin directory on this machine. Prefixing PATH per command is reversible and keeps the repo work self-contained.
+
 ## Outcomes & Retrospective
 
-(Populated after implementation.)
+The digest feature is now implemented end to end in the repo: config storage, repo-context capture, OpenAI scoring, sample-data digestion, feedback logging, onboarding, Click commands, agent JSON output, tests, eval assets, README updates, and the version bump to 0.2.0. The executable paths that were explicitly validated are `python3 -m pytest tests/ -v`, `xx setup --help`, `xx digest --json --sample`, the JSON error path with `env -u OPENAI_API_KEY`, and the TTY `xx digest --sample --debug` flow.
+
+The biggest divergence from the original spec is the eval fixture itself. The checked-in markdown only contains 14 tweet blocks, so the implementation, tests, and eval asset all align to 14 instead of 19. The second notable gap is product behavior rather than correctness: for the current repo context and prompt, the sample digest verifies the empty-state path instead of yielding 3-5 high-scoring items. That is now an explicit refinement target rather than an untracked surprise.
 
 ## Context and Orientation
 
@@ -586,19 +637,19 @@ All milestones are additive. New files can be created in any order within a mile
 
 ### Ontology alignment
 
-(Pending.)
+Fixed. The command surface now matches the product language in the plan: `digest`, `setup`, `why`, and `signal` all exist, the JSON schema is agent-oriented, and feedback/distillation concepts map cleanly onto the stored files in `~/.xxcli/`.
 
 ### Design fidelity
 
-(Pending.) Check all terminal output against DESIGN.md and DESIGN-PREVIEW.html.
+Accepted with one open polish gap. The terminal output uses the `xx_theme` tokens from `DESIGN.md`, keeps metrics dim, and separates human vs machine output. The remaining gap is that the sample path currently lands in the warm empty state because the scorer does not surface any 7+ items for this repo.
 
 ### Product behavior
 
-(Pending.) Test the feedback loop end-to-end: run digest, review filtered items, recover one, run again, verify the next digest reflects the feedback.
+Partially accepted, partially deferred. The feedback loop plumbing exists: accepted digests, recover actions, manual signals, and `xx why` cache inspection are all wired. What is still deferred is a full real-world preference-learning proof that a recovered item measurably shifts a later digest.
 
 ### Tangential discoveries
 
-(Populated during implementation.)
+The checked-in eval fixture and plan text drifted apart (14 vs 19 tweets). This was fixed in code/tests/eval assets, but the original markdown source should still be corrected or replaced with a fuller dataset in a follow-up if 19-item coverage matters.
 
 ## Artifacts and Notes
 
