@@ -166,8 +166,11 @@ def _choose_repo(console) -> Path:
             type=str,
         ).strip()
         if choice.isdigit():
-            selected = repos[int(choice) - 1]
-            return selected
+            idx = int(choice) - 1
+            if 0 <= idx < len(repos):
+                return repos[idx]
+            console.print(f"[xx.warning]Invalid choice. Pick 1–{len(repos)} or enter a path.[/xx.warning]")
+            return _choose_repo(console)
         return Path(choice).expanduser().resolve()
 
     manual = click.prompt("No repos found automatically. Enter a repo path", type=str)
