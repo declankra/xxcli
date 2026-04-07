@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xx setup — Onboarding Design Variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-hover: #1c2128;
+    --border: #30363d;
+    --border-accent: #00bcd4;
+    --text: #e6edf3;
+    --text-muted: #7d8590;
+    --text-dim: #484f58;
+    --accent: #00bcd4;
+    --accent-dim: #00838f;
+    --success: #3fb950;
+    --error: #f85149;
+    --warning: #d29922;
+    --info: #58a6ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    background: #000;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ─── Navigation Bar ─── */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-brand {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .nav-link:hover, .nav-link.active {
+    color: var(--accent);
+    background: rgba(0, 188, 212, 0.1);
+  }
+
+  .nav-link .variant-letter {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  /* ─── Page Layout ─── */
+  .page-content {
+    padding: 40px 20px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    text-align: center;
+    color: var(--accent);
+    font-size: 28px;
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 48px;
+  }
+
+  /* ─── Variant Sections ─── */
+  .variant-section {
+    margin-bottom: 80px;
+    scroll-margin-top: 60px;
+  }
+
+  .variant-header {
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .variant-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .variant-title .letter {
+    color: var(--accent);
+    margin-right: 8px;
+  }
+
+  .variant-philosophy {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* ─── Terminal Window ─── */
+  .terminal-window {
+    background: var(--bg);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 0 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  .terminal-titlebar {
+    background: var(--surface);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .terminal-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .terminal-dot.red { background: #ff5f57; }
+  .terminal-dot.yellow { background: #febc2e; }
+  .terminal-dot.green { background: #28c840; }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .terminal-body {
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* ─── Inline Styles ─── */
+  .c { color: var(--accent); }
+  .g { color: var(--success); }
+  .r { color: var(--error); }
+  .y { color: var(--warning); }
+  .b { color: var(--info); }
+  .d { color: var(--text-muted); }
+  .dd { color: var(--text-dim); }
+  .w { color: #fff; font-weight: 700; }
+  .input { color: var(--success); text-decoration: underline; text-decoration-style: dotted; }
+
+  /* ─── Annotation ─── */
+  .annotation {
+    margin: -4px 0 28px;
+    padding: 12px 20px;
+    background: rgba(0, 188, 212, 0.05);
+    border: 1px solid rgba(0, 188, 212, 0.15);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .annotation .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .tag-new {
+    background: rgba(63, 185, 80, 0.15);
+    color: var(--success);
+  }
+
+  .tag-changed {
+    background: rgba(0, 188, 212, 0.15);
+    color: var(--accent);
+  }
+
+  .tag-removed {
+    background: rgba(248, 81, 73, 0.15);
+    color: var(--error);
+  }
+
+  .tag-kept {
+    background: rgba(125, 133, 144, 0.1);
+    color: var(--text-dim);
+  }
+
+  /* ─── Flow Arrow ─── */
+  .flow-arrow {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 20px;
+    margin: 8px 0;
+  }
+
+  /* ─── Step Label ─── */
+  .step-label {
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 32px 0 12px;
+  }
+
+  /* ─── Progress Bar (inside terminal) ─── */
+  .progress-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .progress-segment {
+    height: 3px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--border);
+  }
+
+  .progress-segment.done {
+    background: var(--accent);
+  }
+
+  .progress-segment.active {
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  /* ─── Activity Bar (repo picker) ─── */
+  .activity-bar {
+    display: inline-block;
+    height: 10px;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  /* ─── Comparison Table ─── */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 12px;
+  }
+
+  .comparison-table th {
+    color: var(--accent);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+  }
+
+  .comparison-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .comparison-table td:first-child {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ─── Summary Box ─── */
+  .summary-box {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 48px 0;
+  }
+
+  .summary-box h2 {
+    color: var(--accent);
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* ─── Divider ─── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 64px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── Navigation Bar ─── -->
+<nav class="nav-bar">
+  <span class="nav-brand">xx setup</span>
+  <div class="nav-links">
+    <a href="#variant-a" class="nav-link"><span class="variant-letter">A</span> Speed Run</a>
+    <a href="#variant-b" class="nav-link"><span class="variant-letter">B</span> Guided Journey</a>
+    <a href="#variant-c" class="nav-link"><span class="variant-letter">C</span> Smart Default</a>
+    <a href="#variant-d" class="nav-link"><span class="variant-letter">D</span> Best Of (Final)</a>
+    <a href="#comparison" class="nav-link">Compare</a>
+    <a href="#current" class="nav-link">Current Flow</a>
+  </div>
+</nav>
+
+<div class="page-content">
+
+<h1>xx setup — Onboarding Redesign</h1>
+<p class="subtitle">Three design variants for the setup wizard. Each solves the same 7 problems differently.</p>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  VARIANT A: SPEED RUN                                              -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<section class="variant-section" id="variant-a">
+<div class="variant-header">
+  <div class="variant-title"><span class="letter">A.</span> Speed Run</div>
+  <div class="variant-philosophy">Get to your first digest in under 60 seconds. Detect everything, prompt for nothing you don't have to.</div>
+</div>
+
+<!-- Step 1: Welcome + Detection -->
+<div class="step-label">Step 1 — Welcome + Auto-Detection</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup</div>
+  </div>
+  <div class="terminal-body"><span class="c">xx</span> <span class="d">— your feed, scored against what you're building</span>
+
+<span class="d">Scanning environment...</span>
+
+  <span class="g">&#10003;</span> X API credentials      <span class="d">found in env (X_API_KEY, X_API_SECRET, ...)</span>
+  <span class="g">&#10003;</span> OpenAI API key         <span class="d">found in env (OPENAI_API_KEY)</span>
+  <span class="g">&#10003;</span> Git repos              <span class="d">found 12 repos, 3 active this week</span>
+  <span class="d">&#9675;</span> Feed calibration       <span class="d">will learn from your first digest</span>
+
+<span class="d">2 of 4 steps already done. Let's finish the rest.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Auto-detects env vars and skips credential prompts entirely. Shows what was found vs what's needed. Adaptive step count.
+  <br><span class="tag tag-changed">CHANGED</span> Welcome now explains what xx does in one line ("your feed, scored against what you're building").
+  <br><span class="tag tag-removed">REMOVED</span> No more "you'll connect X, validate your OpenAI key, choose a repo, and calibrate" wall of text.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 2: Repo Picker (Speed Run) -->
+<div class="step-label">Step 2 — Repo Picker (if env vars found)</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — repos</div>
+  </div>
+  <div class="terminal-body"><div class="progress-bar"><div class="progress-segment done"></div><div class="progress-segment done"></div><div class="progress-segment active"></div><div class="progress-segment"></div></div>
+<span class="d">Step 3 of 4</span>
+
+<span class="c">Which repos are you actively building?</span>
+<span class="d">xx scores your feed by relevance to these projects.</span>
+
+  <span class="c">&#9654;</span> <span class="w">xxcli</span>           <span class="d">~/Code/xxcli</span>
+    <span class="g">main</span> <span class="d">&#183; 2h ago &#183;</span> <span class="c">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="d">47 commits this week</span>
+
+  <span class="c">&#9654;</span> <span class="w">my-saas-app</span>      <span class="d">~/Code/my-saas-app</span>
+    <span class="g">feat/billing</span> <span class="d">&#183; 5h ago &#183;</span> <span class="c">&#9608;&#9608;&#9608;&#9608;&#9608;</span> <span class="d">12 commits this week</span>
+
+    <span class="w">portfolio-site</span>   <span class="d">~/Code/portfolio-site</span>
+    <span class="d">main &#183; 3d ago &#183;</span> <span class="dd">&#9608;&#9608;</span> <span class="d">2 commits this week</span>
+
+  <span class="dd">&#8230; 9 more repos (inactive)</span>        <span class="d">press</span> <span class="c">a</span> <span class="d">to show all</span>
+
+<span class="d">Toggle with</span> <span class="c">space</span><span class="d">, confirm with</span> <span class="c">enter</span><span class="d">. Pick 1-5 repos.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Repos ranked by git recency. Shows branch, last commit time, commit frequency bar. Inactive repos collapsed.
+  <br><span class="tag tag-new">NEW</span> Multi-select with space bar. Most active repos pre-selected (cyan arrow).
+  <br><span class="tag tag-new">NEW</span> Commit frequency visualized as bar chart. Activity at a glance.
+  <br><span class="tag tag-changed">CHANGED</span> Explains WHY: "xx scores your feed by relevance to these projects."
+  <br><span class="tag tag-removed">REMOVED</span> No more flat alphabetical numbered list. No more single-repo limit.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 3: Done -->
+<div class="step-label">Step 3 — Done</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — complete</div>
+  </div>
+  <div class="terminal-body"><div class="progress-bar"><div class="progress-segment done"></div><div class="progress-segment done"></div><div class="progress-segment done"></div><div class="progress-segment done"></div></div>
+
+<span class="g">&#10003; Setup complete</span> <span class="d">in 23 seconds</span>
+
+  <span class="d">Tracking:</span>  <span class="w">xxcli</span><span class="d">,</span> <span class="w">my-saas-app</span>
+  <span class="d">Context:</span>   <span class="d">README.md, CLAUDE.md</span> <span class="g">(auto-detected)</span>
+  <span class="d">X account:</span> <span class="c">@declankra</span>
+  <span class="d">Config:</span>    <span class="d">~/.xxcli/config.yaml</span>
+
+<span class="c">&#10140; Run</span> <span class="w">xx digest</span> <span class="c">to get your first scored feed.</span>
+  <span class="d">Your first digest also calibrates the filter, no separate step needed.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Setup timer shows TTHW. Context files auto-detected, no prompt needed.
+  <br><span class="tag tag-new">NEW</span> Summary shows exactly what was configured. No ambiguity.
+  <br><span class="tag tag-removed">REMOVED</span> No calibration step. Deferred to first <code>xx digest</code> run.
+  <br><span class="tag tag-removed">REMOVED</span> No context files y/N prompt. Auto-included.
+</div>
+
+<!-- Speed Run: Credential Fallback -->
+<div class="step-label">Fallback — If credentials NOT in env</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — credentials</div>
+  </div>
+  <div class="terminal-body"><div class="progress-bar"><div class="progress-segment done"></div><div class="progress-segment active"></div><div class="progress-segment"></div><div class="progress-segment"></div></div>
+<span class="d">Step 2 of 4</span>
+
+<span class="c">X API Credentials</span>
+<span class="d">Get these from</span> <span class="c">developer.x.com/en/portal/dashboard</span>
+<span class="d">You need: API Key, API Secret, Access Token, Access Token Secret</span>
+
+<span class="d">Paste all 4 keys, one per line (or paste a .env block):</span>
+
+<span class="input">X_API_KEY=abc123def456...</span>
+<span class="input">X_API_SECRET=ghi789jkl012...</span>
+<span class="input">X_ACCESS_TOKEN=345678-mno...</span>
+<span class="input">X_ACCESS_TOKEN_SECRET=pqr...</span>
+
+<span class="d">&#9673; Validating with X API...</span>
+<span class="g">&#10003; Connected as @declankra</span> <span class="d">(Declan)</span>
+
+<span class="c">OpenAI API Key</span>
+<span class="d">Get from</span> <span class="c">platform.openai.com/api-keys</span>
+OpenAI key: <span class="input">sk-proj-...••••••••</span>
+<span class="g">&#10003; OpenAI key validated</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Accepts paste-once: all 4 X keys as KEY=VALUE block. Detects format automatically.
+  <br><span class="tag tag-changed">CHANGED</span> Grouped on one screen instead of 4 separate hidden prompts. Shows your X username after validation.
+  <br><span class="tag tag-changed">CHANGED</span> OpenAI key on same screen, one continuous flow.
+</div>
+
+</section>
+
+<hr class="section-divider">
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  VARIANT B: GUIDED JOURNEY                                         -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<section class="variant-section" id="variant-b">
+<div class="variant-header">
+  <div class="variant-title"><span class="letter">B.</span> Guided Journey</div>
+  <div class="variant-philosophy">Teach what xx does at every step. The wizard IS the onboarding, not just config collection.</div>
+</div>
+
+<!-- Step 1: Welcome + Orientation -->
+<div class="step-label">Step 1 — Welcome + Orientation</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup</div>
+  </div>
+  <div class="terminal-body"><span class="c">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   <span class="c w" style="font-size:1.1em">xx</span> <span class="d">terminal client for X</span>                              <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   xx reads your X feed and scores every tweet by         <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   how relevant it is to the code you're writing           <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   right now. No doom scroll. Just signal.                 <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   <span class="d">This setup takes about 2 minutes.</span>                      <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   <span class="d">5 steps. You can re-run</span> <span class="c">xx setup</span> <span class="d">anytime to change.</span>     <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="d">&#9472;&#9472;&#9472; </span><span class="c">1</span><span class="d"> Connect X &#183; </span><span class="c">2</span><span class="d"> Connect AI &#183; </span><span class="c">3</span><span class="d"> Pick repos &#183; </span><span class="c">4</span><span class="d"> Calibrate &#183; </span><span class="c">5</span><span class="d"> Go &#9472;&#9472;&#9472;</span>
+
+Press <span class="c">enter</span> to start</div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Rich panel explains what xx actually does: "scores every tweet by how relevant it is to the code you're writing."
+  <br><span class="tag tag-new">NEW</span> Labeled progress track shows all 5 steps upfront. User knows the full journey.
+  <br><span class="tag tag-new">NEW</span> Time estimate ("about 2 minutes") and re-run hint.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 2: X API Credentials -->
+<div class="step-label">Step 2 — Connect X</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 1/5 Connect X</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="c w">&#9679; Connect X</span><span class="d"> &#183; 2 Connect AI &#183; 3 Pick repos &#183; 4 Calibrate &#183; 5 Go &#9472;&#9472;&#9472;</span>
+
+<span class="c">Connect your X account</span>
+<span class="d">xx needs read access to your timeline. These keys stay local</span>
+<span class="d">in ~/.xxcli/config.yaml and are never sent anywhere except X's API.</span>
+
+<span class="d">Get your keys from:</span> <span class="c">developer.x.com/en/portal/dashboard</span>
+
+<span class="d">&#9484;&#9472; X API Credentials &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span> API Key:              <span class="input">abc123def456ghi789jkl012mn</span>   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span> API Secret:           <span class="input">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span> Access Token:         <span class="input">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span> Access Token Secret:  <span class="input">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>   <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="d">&#9673; Checking connection...</span>
+<span class="g">&#10003; Connected as @declankra</span> <span class="d">(Declan Kramper)</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">CHANGED</span> All 4 credential fields in a single grouped panel instead of 4 separate prompts.
+  <br><span class="tag tag-new">NEW</span> Explains WHY ("read access to your timeline") and WHERE keys are stored ("stay local in ~/.xxcli/config.yaml").
+  <br><span class="tag tag-new">NEW</span> Progress track at top shows current step highlighted.
+  <br><span class="tag tag-new">NEW</span> Shows connected X username after validation for confirmation.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 3: OpenAI Key -->
+<div class="step-label">Step 3 — Connect AI</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 2/5 Connect AI</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="g">&#10003; Connect X</span><span class="d"> &#183; </span><span class="c w">&#9679; Connect AI</span><span class="d"> &#183; 3 Pick repos &#183; 4 Calibrate &#183; 5 Go &#9472;&#9472;&#9472;</span>
+
+<span class="c">Connect OpenAI</span>
+<span class="d">xx uses GPT to score tweets and extract themes from your feed.</span>
+<span class="d">Costs about $0.01 per digest run.</span>
+
+OpenAI API key: <span class="input">sk-proj-...••••••••</span>
+
+<span class="g">&#10003; OpenAI key validated</span> <span class="d">(gpt-5.4-mini)</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Explains what OpenAI is used for: "score tweets and extract themes."
+  <br><span class="tag tag-new">NEW</span> Cost transparency: "$0.01 per digest run."
+  <br><span class="tag tag-changed">CHANGED</span> Progress track shows Step 1 as completed (green check).
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 4: Repo Picker (Guided) -->
+<div class="step-label">Step 4 — Pick Repos</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 3/5 Pick repos</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="g">&#10003; Connect X</span><span class="d"> &#183; </span><span class="g">&#10003; Connect AI</span><span class="d"> &#183; </span><span class="c w">&#9679; Pick repos</span><span class="d"> &#183; 4 Calibrate &#183; 5 Go &#9472;&#9472;&#9472;</span>
+
+<span class="c">What are you building?</span>
+<span class="d">xx reads your git history to understand your current projects,</span>
+<span class="d">then scores tweets by how relevant they are to your work.</span>
+<span class="d">Pick 1-5 repos. The more active, the better the scoring.</span>
+
+<span class="d">&#9484;&#9472; Active This Week &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">[&#10003;]</span> <span class="w">xxcli</span>                                              <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="g">main</span> <span class="d">&#183; last commit 2h ago &#183; 47 commits/week</span>         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="d">~/Code/xxcli</span>                                       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="dd">Python CLI, terminal client for X</span>                  <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="c">[&#10003;]</span> <span class="w">my-saas-app</span>                                        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="g">feat/billing</span> <span class="d">&#183; last commit 5h ago &#183; 12 commits/week</span>  <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="d">~/Code/my-saas-app</span>                                 <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="dd">Next.js SaaS with Stripe billing</span>                   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">[ ]</span> <span class="w">portfolio-site</span>                                     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="d">main &#183; last commit 3d ago &#183; 2 commits/week</span>         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="d">~/Code/portfolio-site</span>                              <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="d">&#9484;&#9472; Inactive &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>  <span class="dd">[ ] ai-agent-project     main &#183; 2w ago &#183; 0/week</span>     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="dd">[ ] experiment           main &#183; 1mo ago &#183; 0/week</span>    <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="dd">... 7 more</span>                                           <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="d">Toggle with</span> <span class="c">space</span><span class="d">, confirm with</span> <span class="c">enter</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Rich activity cards with branch, recency, commit frequency, and repo description (from README first line).
+  <br><span class="tag tag-new">NEW</span> Grouped into "Active This Week" and "Inactive" panels. Active repos pre-checked.
+  <br><span class="tag tag-new">NEW</span> Checkbox multi-select. Most active repos pre-selected.
+  <br><span class="tag tag-changed">CHANGED</span> Full explanation: "xx reads your git history to understand your current projects, then scores tweets by how relevant they are."
+  <br><span class="tag tag-removed">REMOVED</span> No alphabetical list. No single-repo limit. No numbered selection.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 5: Context Files (auto) -->
+<div class="step-label">Step 5 — Context Files (auto-detected)</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 3/5 Pick repos (continued)</div>
+  </div>
+  <div class="terminal-body"><span class="d">Context files found in your repos:</span>
+
+  <span class="w">xxcli</span>
+    <span class="g">&#10003;</span> <span class="d">README.md</span>     <span class="dd">"Terminal client for X that scores your feed..."</span>
+    <span class="g">&#10003;</span> <span class="d">CLAUDE.md</span>     <span class="dd">"Design system, skill routing rules..."</span>
+
+  <span class="w">my-saas-app</span>
+    <span class="g">&#10003;</span> <span class="d">README.md</span>     <span class="dd">"SaaS starter with Stripe, auth, dashboard..."</span>
+
+<span class="d">These help xx understand what you're building (better scoring).</span>
+<span class="d">Include all?</span> <span class="c">[Y/n]</span>: <span class="input">Y</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">CHANGED</span> Shows context files per-repo with first-line previews. User understands what's being included.
+  <br><span class="tag tag-changed">CHANGED</span> Explains purpose: "help xx understand what you're building."
+  <br><span class="tag tag-kept">KEPT</span> Simple Y/n confirmation, but now with more context.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 6: Mini Calibration -->
+<div class="step-label">Step 6 — Calibrate (3 tweets)</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 4/5 Calibrate</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="g">&#10003; Connect X</span><span class="d"> &#183; </span><span class="g">&#10003; Connect AI</span><span class="d"> &#183; </span><span class="g">&#10003; Pick repos</span><span class="d"> &#183; </span><span class="c w">&#9679; Calibrate</span><span class="d"> &#183; 5 Go &#9472;&#9472;&#9472;</span>
+
+<span class="c">Quick taste test</span> <span class="d">(3 tweets, 30 seconds)</span>
+<span class="d">Rate a few tweets so xx learns what "useful" means to you.</span>
+<span class="d">The filter keeps learning from every digest you run.</span>
+
+<span class="d">&#9484;&#9472; 1 of 3 &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>  <span class="w">Andrej Karpathy</span> <span class="d">@karpathy &#183; 4h</span>                        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  The thing about training large language models is       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  that the loss curve tells you almost everything you     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  need to know about what went wrong.                     <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+  <span class="c">[u]</span><span class="d">seful</span>   <span class="c">[s]</span><span class="d">kip</span>   <span class="c">[n]</span><span class="d">oise</span>   : <span class="input">u</span>
+
+<span class="g">&#10003;</span> <span class="d">Got it. ML/training content is useful for you.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">CHANGED</span> Only 3 tweets instead of 10. Enough to seed the filter, not enough to bore the user.
+  <br><span class="tag tag-changed">CHANGED</span> Simplified to 3 options: useful, skip, noise. Removed "maybe" (it's just skip).
+  <br><span class="tag tag-new">NEW</span> Tweet displayed in a Rich panel card (matches the digest style).
+  <br><span class="tag tag-new">NEW</span> Tells user "the filter keeps learning from every digest" so they know this isn't the only chance.
+  <br><span class="tag tag-new">NEW</span> Progress: "1 of 3" in panel header. Time estimate: "30 seconds."
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 7: Done -->
+<div class="step-label">Step 7 — Done</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — complete</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="g">&#10003; Connect X</span><span class="d"> &#183; </span><span class="g">&#10003; Connect AI</span><span class="d"> &#183; </span><span class="g">&#10003; Pick repos</span><span class="d"> &#183; </span><span class="g">&#10003; Calibrate</span><span class="d"> &#183; </span><span class="g">&#10003; Go</span><span class="d"> &#9472;&#9472;&#9472;</span>
+
+<span class="g">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="g">&#10003; You're all set</span>                                       <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">X account:</span>  <span class="c">@declankra</span>                                <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">AI model:</span>   <span class="d">gpt-5.4-mini</span>                              <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Tracking:</span>   <span class="w">xxcli</span><span class="d">,</span> <span class="w">my-saas-app</span>                        <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Context:</span>    <span class="d">README.md, CLAUDE.md (3 files)</span>             <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Calibrated:</span> <span class="d">3 tweets rated</span>                             <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Config:</span>     <span class="d">~/.xxcli/config.yaml</span>                      <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="c">&#10140; Run</span> <span class="w">xx digest</span> <span class="c">for your first scored feed</span>            <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Tip: run</span> <span class="c">xx setup</span> <span class="d">again anytime to change repos,</span>       <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">add keys, or recalibrate.</span>                              <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Rich completion panel with green border. Full summary of everything configured.
+  <br><span class="tag tag-new">NEW</span> Re-run hint: "run xx setup again anytime."
+  <br><span class="tag tag-new">NEW</span> All 5 steps show green checks in progress track.
+</div>
+
+</section>
+
+<hr class="section-divider">
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  VARIANT C: SMART DEFAULT                                          -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<section class="variant-section" id="variant-c">
+<div class="variant-header">
+  <div class="variant-title"><span class="letter">C.</span> Smart Default</div>
+  <div class="variant-philosophy">Scan everything upfront, show what was detected, only ask about what's missing.</div>
+</div>
+
+<!-- Step 1: Detection Scan -->
+<div class="step-label">Step 1 — Environment Scan</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup</div>
+  </div>
+  <div class="terminal-body"><span class="c">xx</span> <span class="d">scores your X feed against what you're building</span>
+
+<span class="d">&#9673; Scanning your environment...</span>
+
+<span class="d">&#9484;&#9472; Detection Results &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="r">&#10007;</span> <span class="d">X API keys</span>        <span class="r">not found</span>                       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="d">OpenAI key</span>        <span class="g">found in OPENAI_API_KEY</span>         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="d">Active repos</span>      <span class="g">3 repos with commits this week</span>  <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="d">Context files</span>     <span class="g">README.md, CLAUDE.md found</span>      <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">&#9675;</span> <span class="d">Feed calibration</span>  <span class="d">deferred to first digest</span>        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="c">1 thing to configure.</span> <span class="d">Everything else is ready.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Full environment scan upfront. Shows everything it detected in one panel.
+  <br><span class="tag tag-new">NEW</span> Adaptive: "1 thing to configure" instead of "7 steps." Only prompts for what's missing.
+  <br><span class="tag tag-new">NEW</span> Color-coded status: green (found), red (missing), dim (deferred).
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 2: Only the missing thing (X API keys) -->
+<div class="step-label">Step 2 — Configure What's Missing</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — X API keys</div>
+  </div>
+  <div class="terminal-body"><span class="c">Connect your X account</span>
+<span class="d">Get 4 keys from</span> <span class="c">developer.x.com/en/portal/dashboard</span>
+
+<span class="d">Tip: paste them as a block (KEY=VALUE format works)</span>
+
+<span class="input">X_API_KEY=abc123def456...</span>
+<span class="input">X_API_SECRET=ghi789jkl012...</span>
+<span class="input">X_ACCESS_TOKEN=345678-mno...</span>
+<span class="input">X_ACCESS_TOKEN_SECRET=pqr...</span>
+
+<span class="d">&#9673; Connecting to X...</span>
+<span class="g">&#10003; Connected as @declankra</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">CHANGED</span> Only shows this step because X API keys were the only missing config. Other steps skipped.
+  <br><span class="tag tag-new">NEW</span> Paste-once: accepts KEY=VALUE block format.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 3: Confirmation (Smart Default's key innovation) -->
+<div class="step-label">Step 3 — Confirm Everything</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — confirm</div>
+  </div>
+  <div class="terminal-body"><span class="c">Here's your setup. Confirm or adjust:</span>
+
+<span class="d">&#9484;&#9472; Configuration &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">X account</span>   <span class="g">@declankra</span> <span class="d">(just connected)</span>                <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">AI model</span>    <span class="d">gpt-5.4-mini via OPENAI_API_KEY</span>             <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">Repos</span>       <span class="d">(auto-selected by git activity)</span>             <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>              <span class="w">xxcli</span>       <span class="g">main</span> <span class="d">&#183; 2h ago &#183; 47/week</span>     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>              <span class="w">my-saas-app</span> <span class="g">feat/billing</span> <span class="d">&#183; 5h &#183; 12/wk</span>  <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">Context</span>     <span class="d">README.md, CLAUDE.md (auto-detected)</span>        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">Calibration</span> <span class="d">deferred to first</span> <span class="c">xx digest</span>                <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+  <span class="c">[enter]</span> <span class="d">Looks good, save</span>
+  <span class="c">[r]</span>     <span class="d">Change repos</span>
+  <span class="c">[c]</span>     <span class="d">Change credentials</span>
+  <span class="c">[q]</span>     <span class="d">Cancel</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Single confirmation screen shows EVERYTHING at once. User reviews one unified view instead of remembering 7 separate steps.
+  <br><span class="tag tag-new">NEW</span> Auto-selected repos based on git activity. No repo picker step unless user presses [r].
+  <br><span class="tag tag-new">NEW</span> Keyboard shortcuts to drill into any section that needs adjustment.
+  <br><span class="tag tag-removed">REMOVED</span> No calibration during setup. Git context provides implicit signal.
+  <br><span class="tag tag-removed">REMOVED</span> No context file prompt. Auto-detected and included.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 3b: Repo adjustment (if user presses [r]) -->
+<div class="step-label">Step 3b — Repo Adjustment (only if user presses [r])</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — adjust repos</div>
+  </div>
+  <div class="terminal-body"><span class="c">Adjust tracked repos</span>
+<span class="d">xx auto-selected repos you've committed to this week.</span>
+<span class="d">Toggle any repo to add or remove it.</span>
+
+  <span class="g">[&#10003;]</span> <span class="w">xxcli</span>              <span class="g">main</span> <span class="d">&#183; 2h ago &#183; 47/wk</span>
+  <span class="g">[&#10003;]</span> <span class="w">my-saas-app</span>        <span class="g">feat/billing</span> <span class="d">&#183; 5h ago &#183; 12/wk</span>
+  <span class="d">[ ]</span> <span class="d">portfolio-site</span>     <span class="d">main &#183; 3d ago &#183; 2/wk</span>
+  <span class="dd">[ ] ai-agent-project   main &#183; 2w ago</span>
+  <span class="dd">[ ] experiment         main &#183; 1mo ago</span>
+  <span class="dd">&#8230; 7 more</span>
+
+  <span class="d">Type to search:</span> <span class="input">port</span>
+  <span class="d">&#8627; Showing: portfolio-site</span>
+
+<span class="d">Toggle with</span> <span class="c">space</span><span class="d">, search by typing, confirm with</span> <span class="c">enter</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Fuzzy search: start typing to filter the repo list. For 50+ repos, this beats scrolling.
+  <br><span class="tag tag-new">NEW</span> Only shown when user explicitly asks to adjust. Most users just confirm auto-selection.
+  <br><span class="tag tag-changed">CHANGED</span> Same activity-ranked, multi-select design as other variants.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 4: Done -->
+<div class="step-label">Step 4 — Done</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — complete</div>
+  </div>
+  <div class="terminal-body"><span class="g">&#10003; Saved to ~/.xxcli/config.yaml</span>
+
+<span class="c">&#10140; Run</span> <span class="w">xx digest</span> <span class="c">now</span>
+  <span class="d">Your first digest calibrates the filter automatically.</span>
+  <span class="d">No separate calibration step needed.</span>
+
+  <span class="d">Re-run</span> <span class="c">xx setup</span> <span class="d">anytime to add repos, change keys, or reconfigure.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Minimal completion. One line confirmation, clear next action.
+  <br><span class="tag tag-changed">CHANGED</span> Entire wizard was 2 interactive steps (paste X keys + confirm) instead of 7.
+</div>
+
+<!-- Smart Default: When EVERYTHING is detected -->
+<div class="step-label">Best Case — Everything Auto-Detected</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup</div>
+  </div>
+  <div class="terminal-body"><span class="c">xx</span> <span class="d">scores your X feed against what you're building</span>
+
+<span class="d">&#9673; Scanning your environment...</span>
+
+<span class="d">&#9484;&#9472; Detection Results &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="d">X API keys</span>        <span class="g">found in env</span> <span class="d">(4 keys)</span>           <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="d">OpenAI key</span>        <span class="g">found in OPENAI_API_KEY</span>         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="d">Active repos</span>      <span class="g">xxcli, my-saas-app</span>              <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="d">Context files</span>     <span class="g">README.md, CLAUDE.md</span>            <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">&#9675;</span> <span class="d">Calibration</span>       <span class="d">deferred to first digest</span>        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="g">Everything detected. 0 steps needed.</span>
+
+  <span class="c">[enter]</span> <span class="d">Save and go</span>        <span class="c">[r]</span> <span class="d">Review/change settings</span>
+
+<span class="d">&#9673; Validating credentials...</span>
+<span class="g">&#10003; X: @declankra</span>    <span class="g">&#10003; OpenAI: valid</span>
+<span class="g">&#10003; Saved to ~/.xxcli/config.yaml</span>
+
+<span class="c">&#10140; Run</span> <span class="w">xx digest</span> <span class="c">for your first scored feed.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Zero-step setup when all credentials are in env vars and repos are active. One-key confirmation.
+  <br><span class="tag tag-new">NEW</span> Still validates credentials even when auto-detected (shows green checks).
+  <br>This is the ideal returning-user or env-var-configured path. Setup in literally 2 seconds.
+</div>
+
+</section>
+
+<hr class="section-divider">
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  VARIANT D: BEST OF (FINAL)                                        -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<section class="variant-section" id="variant-d">
+<div class="variant-header">
+  <div class="variant-title"><span class="letter">D.</span> Best Of (Final)</div>
+  <div class="variant-philosophy">B's welcome + A/C's smart scanning + C's search + B's guided multi-select + Obsidian vaults + B's mini calibration + B's summary.</div>
+</div>
+
+<!-- Step 1: Welcome + Orientation (from B) -->
+<div class="step-label">Step 1 — Welcome + Orientation</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup</div>
+  </div>
+  <div class="terminal-body"><span class="c">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   <span class="c w" style="font-size:1.1em">xx</span> <span class="d">terminal client for X</span>                              <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   xx reads your X feed and scores every tweet by         <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   how relevant it is to the code you're writing           <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   right now. No doom scroll. Just signal.                 <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   <span class="d">This takes about 2 minutes. You can re-run</span>             <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>   <span class="c">xx setup</span> <span class="d">anytime to change settings.</span>                  <span class="c">&#9474;</span>
+<span class="c">&#9474;</span>                                                          <span class="c">&#9474;</span>
+<span class="c">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+Press <span class="c">enter</span> to start</div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">FROM B</span> Rich orientation panel. User understands the product before touching any config.
+  <br>One-liner value prop: "scores every tweet by how relevant it is to the code you're writing right now."
+  <br>Meta info: time estimate, re-run hint.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 2: Smart Environment Scan (from A/C, triggered by pressing enter) -->
+<div class="step-label">Step 2 — Environment Scan (immediate after Start)</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — scanning</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9673; Scanning your environment...</span>
+
+<span class="d">&#9484;&#9472; What I Found &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="r">&#10007;</span> <span class="w">X API keys</span>          <span class="r">not found</span>                     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>    <span class="d">Checked: env vars, ~/.xxcli/config.yaml</span>              <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="w">OpenAI API key</span>      <span class="g">found in OPENAI_API_KEY</span>       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>    <span class="d">&#9673; Validating... </span><span class="g">&#10003; valid</span> <span class="d">(gpt-5.4-mini)</span>            <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="w">Codex subscription</span>  <span class="g">detected via ~/.codex/</span>       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>    <span class="d">OpenAI usage covered by Codex plan, no extra cost</span>   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="w">Git repos</span>           <span class="g">12 found, 3 active this week</span> <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="c">3 things to set up.</span> <span class="d">Credentials, repos, and a quick taste test.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">FROM A/C</span> Instant environment scan after pressing Start. Checks off what's already there, flags what's missing.
+  <br><span class="tag tag-new">NEW</span> Codex subscription auto-detection via <code>~/.codex/</code>. If found, notes "no extra cost" for OpenAI usage.
+  <br><span class="tag tag-new">NEW</span> Shows WHERE it checked ("env vars, ~/.xxcli/config.yaml") so user knows what was scanned.
+  <br><span class="tag tag-new">NEW</span> Validates found credentials inline (spinner then green check). User sees live status.
+  <br><span class="tag tag-changed">HYBRID</span> Adaptive step count: "3 things to set up" not "7 steps." Only counts what's actually needed.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 3: X API Credentials (only if missing) -->
+<div class="step-label">Step 3 — Connect X (only shown because not found)</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 1/3 Connect X</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="c w">&#9679; Connect X</span><span class="d"> &#183; 2 Pick repos &#183; 3 Taste test &#9472;&#9472;&#9472;</span>
+
+<span class="c">Connect your X account</span>
+<span class="d">xx needs read access to your timeline to fetch tweets for scoring.</span>
+<span class="d">These keys stay local in ~/.xxcli/config.yaml and are never shared.</span>
+
+<span class="d">Get your 4 keys from:</span> <span class="c">developer.x.com/en/portal/dashboard</span>
+<span class="d">You need an app with "Read" permissions under "User authentication."</span>
+
+<span class="d">Tip: paste all 4 as KEY=VALUE lines, or enter one at a time.</span>
+
+<span class="d">&#9484;&#9472; X API Credentials &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span> API Key:              <span class="input">abc123def456ghi789jkl012mn</span>   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span> API Secret:           <span class="input">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span> Access Token:         <span class="input">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span> Access Token Secret:  <span class="input">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>   <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="d">&#9673; Connecting to X API...</span>
+<span class="g">&#10003; Connected as</span> <span class="c">@declankra</span> <span class="d">(Declan Kramper)</span>
+<span class="g">&#10003; Read permissions confirmed</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">HYBRID</span> Progress track only shows remaining steps (1/3, not 1/7). Adapts to what the scan found.
+  <br><span class="tag tag-changed">FROM B</span> Explains WHY ("read access to your timeline"), WHERE to get keys, and WHERE they're stored.
+  <br><span class="tag tag-changed">FROM A/C</span> Grouped credential panel. Accepts paste-once KEY=VALUE block.
+  <br><span class="tag tag-new">NEW</span> Shows live validation status: spinner, then green check with username AND permission confirmation.
+  <br><span class="tag tag-new">NEW</span> Helpful hint: "You need an app with Read permissions under User authentication."
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 4: Repo Picker (B's multi-select + C's search + activity details) -->
+<div class="step-label">Step 4 — Pick Repos</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 2/3 Pick repos</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="g">&#10003; Connect X</span><span class="d"> &#183; </span><span class="c w">&#9679; Pick repos</span><span class="d"> &#183; 3 Taste test &#9472;&#9472;&#9472;</span>
+
+<span class="c">What are you building?</span>
+<span class="d">xx reads your recent git activity (commits, branches, diffs) to</span>
+<span class="d">understand your projects, then scores every tweet in your feed by</span>
+<span class="d">how relevant it is to your current work. The more active the repo,</span>
+<span class="d">the better the scoring. Pick 1-5.</span>
+
+<span class="d">&#9484;&#9472; Active This Week &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">[&#10003;]</span> <span class="w">xxcli</span>                                              <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="g">main</span> <span class="d">&#183; last commit 2h ago &#183; 47 commits/week</span>         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="dd">Python CLI, terminal client for X</span>                  <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="c">[&#10003;]</span> <span class="w">my-saas-app</span>                                        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="g">feat/billing</span> <span class="d">&#183; last commit 5h ago &#183; 12 commits/week</span>  <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="dd">Next.js SaaS with Stripe billing</span>                   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">[ ]</span> <span class="w">portfolio-site</span>                                     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="d">main &#183; last commit 3d ago &#183; 2 commits/week</span>         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="dd">Personal portfolio and blog</span>                        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="d">&#9484;&#9472; Older &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>  <span class="dd">[ ] ai-agent-project     main &#183; 2w ago &#183; 0/week</span>     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="dd">[ ] side-project         main &#183; 3w ago &#183; 0/week</span>     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="dd">[ ] experiment           main &#183; 1mo ago &#183; 0/week</span>    <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="dd">... 6 more</span>                                           <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+  <span class="d">Search:</span> <span class="input">port</span>  <span class="d">&#8627; Showing: portfolio-site</span>
+
+<span class="d">Toggle with</span> <span class="c">space</span><span class="d">, search by typing, confirm with</span> <span class="c">enter</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">FROM B</span> Guided explanation: "xx reads your recent git activity... to understand your projects, then scores every tweet by how relevant it is."
+  <br><span class="tag tag-changed">FROM B</span> Checkbox multi-select. Active repos grouped at top, pre-checked. Inactive repos in separate dimmer panel.
+  <br><span class="tag tag-changed">FROM C</span> Fuzzy search: type to filter. Essential when 50+ repos exist.
+  <br><span class="tag tag-changed">FROM B/C</span> Inline summaries: branch, last commit time, commits/week, one-line description from README.
+  <br><span class="tag tag-new">GRADIENT</span> Active repos are full brightness. Older repos fade to dim. Visual recency at a glance.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 4b: Additional Local Context (Obsidian Vaults) — NEW -->
+<div class="step-label">Step 4b — Additional Local Context (Obsidian Vaults)</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 2/3 Pick repos (continued)</div>
+  </div>
+  <div class="terminal-body"><span class="c">Any other local context?</span>
+<span class="d">Beyond your git repos, xx can read local notes to better</span>
+<span class="d">understand what topics matter to you. This helps score tweets</span>
+<span class="d">about things you're researching or thinking about, not just coding.</span>
+
+<span class="d">&#9673; Scanning for Obsidian vaults...</span>
+
+<span class="d">&#9484;&#9472; Obsidian Vaults Found &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="c">[&#10003;]</span> <span class="w">Second Brain</span>                                       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="d">~/Documents/Second Brain</span>                            <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="dd">847 notes &#183; last modified 1h ago</span>                   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="d">[ ]</span> <span class="w">Work Notes</span>                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="d">~/Documents/Work Notes</span>                              <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>      <span class="dd">124 notes &#183; last modified 2d ago</span>                   <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="d">Toggle with</span> <span class="c">space</span><span class="d">, or</span> <span class="c">enter</span> <span class="d">to skip</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Replaces in-repo context files (README.md etc.) which are redundant since xx already reads git context.
+  <br><span class="tag tag-new">NEW</span> Auto-scans for Obsidian vaults by looking for <code>.obsidian/</code> directories in common locations.
+  <br><span class="tag tag-new">NEW</span> Shows note count and recency. Vault selection is optional (enter to skip).
+  <br><span class="tag tag-new">INSIGHT</span> Obsidian vaults capture what you're <em>thinking about</em>, not just what you're <em>coding</em>. Much richer signal for tweet scoring.
+  <br><span class="tag tag-changed">GUIDED</span> Explains why: "helps score tweets about things you're researching or thinking about, not just coding."
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 4c: No Vaults Found (fallback) -->
+<div class="step-label">Step 4b — Fallback: No Vaults Found</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 2/3 Pick repos (continued)</div>
+  </div>
+  <div class="terminal-body"><span class="c">Any other local context?</span>
+<span class="d">Beyond your git repos, xx can read local notes to better</span>
+<span class="d">understand what topics matter to you.</span>
+
+<span class="d">&#9673; Scanning for Obsidian vaults...</span>
+<span class="d">&#9675; No Obsidian vaults found</span>
+
+<span class="d">If you have an Obsidian vault, enter the path:</span>
+Path <span class="d">(or press enter to skip)</span>: <span class="input">enter</span>
+
+<span class="d">No problem. xx will score based on your git context only.</span>
+<span class="d">You can add a vault later with</span> <span class="c">xx setup</span><span class="d">.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">NEW</span> Graceful fallback when no vaults detected. Offers manual path entry. Easy to skip with enter.
+  <br>Reassures: "xx will score based on your git context only." Not a dead end.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 5: Calibration (B's 3-tweet mini calibration) -->
+<div class="step-label">Step 5 — Quick Taste Test (3 tweets)</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 3/3 Taste test</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="g">&#10003; Connect X</span><span class="d"> &#183; </span><span class="g">&#10003; Pick repos</span><span class="d"> &#183; </span><span class="c w">&#9679; Taste test</span><span class="d"> &#9472;&#9472;&#9472;</span>
+
+<span class="c">Quick taste test</span> <span class="d">(3 tweets, ~30 seconds)</span>
+<span class="d">Rate a few tweets so xx learns what "useful" means to you.</span>
+<span class="d">The filter keeps learning from every digest you run after this.</span>
+
+<span class="d">&#9484;&#9472; 1 of 3 &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>  <span class="w">Andrej Karpathy</span> <span class="d">@karpathy &#183; 4h</span>                        <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  The thing about training large language models is       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  that the loss curve tells you almost everything you     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  need to know about what went wrong.                     <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+  <span class="c">[u]</span><span class="d">seful</span>   <span class="c">[s]</span><span class="d">kip</span>   <span class="c">[n]</span><span class="d">oise</span>   : <span class="input">u</span>
+
+<span class="g">&#10003;</span> <span class="d">Got it. ML/training content is useful for you.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">FROM B</span> 3 tweets instead of 10. Simple <code>[u]seful / [s]kip / [n]oise</code> one-key input.
+  <br><span class="tag tag-changed">FROM B</span> Tweet in Rich panel card. Progress counter "1 of 3" in header.
+  <br><span class="tag tag-changed">FROM B</span> Reassurance: "the filter keeps learning from every digest you run after this."
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 5b: Tweet 2 -->
+<div class="step-label">Step 5 (continued) — Tweet 2 of 3</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — 3/3 Taste test</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9484;&#9472; 2 of 3 &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>  <span class="w">Some Influencer</span> <span class="d">@influencer &#183; 6h</span>                      <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  Just had the best avocado toast in Brooklyn              <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+  <span class="c">[u]</span><span class="d">seful</span>   <span class="c">[s]</span><span class="d">kip</span>   <span class="c">[n]</span><span class="d">oise</span>   : <span class="input">n</span>
+
+<span class="d">&#9484;&#9472; 3 of 3 &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>  <span class="w">Vercel</span> <span class="d">@vercel &#183; 2h</span>                                     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  Next.js 16 is here. Cache Components, async headers,    <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  and the Turbopack bundler is now default.                <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+  <span class="c">[u]</span><span class="d">seful</span>   <span class="c">[s]</span><span class="d">kip</span>   <span class="c">[n]</span><span class="d">oise</span>   : <span class="input">u</span>
+
+<span class="g">&#10003; Taste test complete.</span> <span class="d">xx now knows ML content and frontend frameworks are useful.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">FROM B</span> Shows all 3 tweets in sequence, fast one-key responses. Takes ~30 seconds total.
+  <br><span class="tag tag-new">NEW</span> Summary after completion: "xx now knows ML content and frontend frameworks are useful." Confirms what the filter learned.
+</div>
+
+<div class="flow-arrow">&#8595;</div>
+
+<!-- Step 6: Complete (from B) -->
+<div class="step-label">Step 6 — Complete</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — complete</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9472;&#9472;&#9472; </span><span class="g">&#10003; Connect X</span><span class="d"> &#183; </span><span class="g">&#10003; Pick repos</span><span class="d"> &#183; </span><span class="g">&#10003; Taste test</span><span class="d"> &#9472;&#9472;&#9472;</span>
+
+<span class="g">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="g">&#10003; You're all set</span>                                       <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">X account:</span>    <span class="c">@declankra</span>                               <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">AI model:</span>     <span class="d">gpt-5.4-mini</span> <span class="dd">(via Codex subscription)</span>   <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Tracking:</span>     <span class="w">xxcli</span><span class="d">,</span> <span class="w">my-saas-app</span>                       <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Local notes:</span>  <span class="d">Second Brain vault (847 notes)</span>            <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Calibrated:</span>   <span class="d">3 tweets rated</span>                            <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Cost:</span>         <span class="d">~$0.01/digest</span> <span class="dd">(covered by Codex plan)</span>    <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Config:</span>       <span class="d">~/.xxcli/config.yaml</span>                     <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="c">&#10140; Run</span> <span class="w">xx digest</span> <span class="c">for your first scored feed</span>            <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="d">Other commands:</span>                                       <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="c">xx feed</span>    <span class="d">browse your full timeline</span>                  <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="c">xx post</span>    <span class="d">compose a tweet from terminal</span>              <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>   <span class="c">xx setup</span>   <span class="d">change repos, keys, or recalibrate</span>        <span class="g">&#9474;</span>
+<span class="g">&#9474;</span>                                                          <span class="g">&#9474;</span>
+<span class="g">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-changed">FROM B</span> Rich green completion panel. Full summary of everything configured.
+  <br><span class="tag tag-new">NEW</span> Shows Obsidian vault in summary. Shows cost with Codex subscription note.
+  <br><span class="tag tag-new">NEW</span> Lists other available commands (xx feed, xx post) so user knows what else exists.
+  <br><span class="tag tag-changed">FROM B</span> Re-run hint: "xx setup" listed as a command to change anything.
+  <br><span class="tag tag-changed">HYBRID</span> Progress track shows all green checks. Complete journey visible.
+</div>
+
+<!-- Variant D: When env vars ARE found (fewer steps) -->
+<div class="step-label">Variant D — When Credentials Are Already Set</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup — scanning</div>
+  </div>
+  <div class="terminal-body"><span class="d">&#9673; Scanning your environment...</span>
+
+<span class="d">&#9484;&#9472; What I Found &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="w">X API keys</span>          <span class="g">found in env</span>                 <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>    <span class="d">&#9673; Validating...</span> <span class="g">&#10003; @declankra</span> <span class="d">(read access)</span>      <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="w">OpenAI API key</span>      <span class="g">found in OPENAI_API_KEY</span>       <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>    <span class="d">&#9673; Validating...</span> <span class="g">&#10003; valid</span> <span class="d">(gpt-5.4-mini)</span>           <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="w">Codex subscription</span>  <span class="g">detected</span>                     <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>    <span class="d">~$0.01/digest covered by your Codex plan</span>             <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>  <span class="g">&#10003;</span> <span class="w">Git repos</span>           <span class="g">12 found, 3 active this week</span> <span class="d">&#9474;</span>
+<span class="d">&#9474;</span>                                                         <span class="d">&#9474;</span>
+<span class="d">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span>
+
+<span class="g">All credentials found and validated.</span>
+<span class="c">2 things to set up:</span> <span class="d">repos and a quick taste test.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-new">ADAPTIVE</span> When env vars exist, credentials are auto-validated with live status. Skips the credential step entirely.
+  <br>Progress adapts: "2 things to set up" (repos + taste test). The credential step never appears.
+  <br>User still sees every validation happening in real time. Builds confidence that detection actually works.
+</div>
+
+</section>
+
+<hr class="section-divider">
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  COMPARISON TABLE                                                   -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<section class="variant-section" id="comparison">
+<div class="variant-header">
+  <div class="variant-title">Comparison</div>
+  <div class="variant-philosophy">How each variant addresses the 7 key problems</div>
+</div>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>Problem</th>
+      <th>A. Speed Run</th>
+      <th>B. Guided Journey</th>
+      <th>C. Smart Default</th>
+      <th style="color: var(--accent);">D. Best Of</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Repo picker is dumb</td>
+      <td>Ranked by recency, commit frequency bars, branch shown</td>
+      <td>Rich activity cards with branch, recency, commit frequency, README description</td>
+      <td>Auto-selected by activity, fuzzy search for adjustment</td>
+      <td style="color: var(--text);">Activity cards + fuzzy search + guided explanation of why</td>
+    </tr>
+    <tr>
+      <td>Single repo only</td>
+      <td>Multi-select with space bar, 1-5 repos</td>
+      <td>Checkbox multi-select, grouped by active/inactive</td>
+      <td>Auto-multi-select, toggle to adjust</td>
+      <td style="color: var(--text);">Checkbox multi-select, active/older groups, fuzzy search</td>
+    </tr>
+    <tr>
+      <td>No context (why)</td>
+      <td>One-liner at top: "scored against what you're building"</td>
+      <td>Full explanation at each step. Orientation panel at start.</td>
+      <td>One-liner at top, confirmation screen shows full picture</td>
+      <td style="color: var(--text);">Rich welcome panel + guided explanations at each step</td>
+    </tr>
+    <tr>
+      <td>Credential friction</td>
+      <td>Auto-detect env vars, skip if found. Paste-once fallback.</td>
+      <td>Grouped panel (4 fields on one screen), explanation of what/why/where stored</td>
+      <td>Auto-detect env vars. Only prompt for missing keys. Paste-once.</td>
+      <td style="color: var(--text);">Auto-detect + Codex detection + live validation + guided paste-once</td>
+    </tr>
+    <tr>
+      <td>Calibration tedious</td>
+      <td>Deferred entirely to first xx digest</td>
+      <td>3 tweets (down from 10), explains filter keeps learning</td>
+      <td>Deferred entirely, git context is implicit signal</td>
+      <td style="color: var(--text);">3 tweets with simple u/s/n input, explains continuous learning</td>
+    </tr>
+    <tr>
+      <td>No progress indicator</td>
+      <td>Visual progress bar segments + adaptive step count</td>
+      <td>Labeled progress track with step names, green checks for completed</td>
+      <td>Detection summary replaces steps. "1 thing to configure."</td>
+      <td style="color: var(--text);">Adaptive labeled track (only shows remaining steps)</td>
+    </tr>
+    <tr>
+      <td>Not proactive/dynamic</td>
+      <td>Env var detection, auto-skip, adaptive step count</td>
+      <td>Env var detection, but still walks through all steps for education</td>
+      <td>Maximum auto-detection. Zero-step path when everything found.</td>
+      <td style="color: var(--text);">Smart scan + Codex detection + skip found + Obsidian vault discovery</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="comparison-table" style="margin-top: 32px;">
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Current</th>
+      <th>A. Speed Run</th>
+      <th>B. Guided Journey</th>
+      <th>C. Smart Default</th>
+      <th style="color: var(--accent);">D. Best Of</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Steps (fresh install)</td>
+      <td>7</td>
+      <td>3-4</td>
+      <td>5</td>
+      <td>2-3</td>
+      <td style="color: var(--text);">5 (welcome, scan, creds, repos+vaults, calibrate, done)</td>
+    </tr>
+    <tr>
+      <td>Steps (env vars set)</td>
+      <td>7 (no skip)</td>
+      <td>1-2</td>
+      <td>3</td>
+      <td>0-1</td>
+      <td style="color: var(--text);">3 (welcome, scan+skip, repos+vaults, calibrate, done)</td>
+    </tr>
+    <tr>
+      <td>TTHW (first digest)</td>
+      <td>~5 min</td>
+      <td>~30s</td>
+      <td>~2 min</td>
+      <td>~10s (env) / ~1 min</td>
+      <td style="color: var(--text);">~90s fresh / ~60s with env vars</td>
+    </tr>
+    <tr>
+      <td>Calibration tweets</td>
+      <td>10</td>
+      <td>0 (deferred)</td>
+      <td>3</td>
+      <td>0 (deferred)</td>
+      <td style="color: var(--text);">3</td>
+    </tr>
+    <tr>
+      <td>Multi-repo</td>
+      <td>No</td>
+      <td>Yes (1-5)</td>
+      <td>Yes (1-5)</td>
+      <td>Yes (auto)</td>
+      <td style="color: var(--text);">Yes (1-5, checkbox + search)</td>
+    </tr>
+    <tr>
+      <td>Explains "why"</td>
+      <td>Never</td>
+      <td>Once (top)</td>
+      <td>Every step</td>
+      <td>Once (top)</td>
+      <td style="color: var(--text);">Welcome panel + every step</td>
+    </tr>
+    <tr>
+      <td>Re-run friendly</td>
+      <td>Partial</td>
+      <td>Full (skips configured)</td>
+      <td>Full (pre-fills existing)</td>
+      <td>Full (shows current, adjust)</td>
+      <td style="color: var(--text);">Full (scan + skip configured + adjust)</td>
+    </tr>
+    <tr>
+      <td>Best for</td>
+      <td>—</td>
+      <td>Power users, CI, agents</td>
+      <td>First-time users, onboarding</td>
+      <td>Returning users, env-configured devs</td>
+      <td style="color: var(--text);">Everyone. Adapts to context.</td>
+    </tr>
+  </tbody>
+</table>
+
+</section>
+
+<hr class="section-divider">
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  CURRENT FLOW REFERENCE                                            -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<section class="variant-section" id="current">
+<div class="variant-header">
+  <div class="variant-title">Current Flow (Reference)</div>
+  <div class="variant-philosophy">What exists today. 7 steps, no auto-detection, no progress indicator, single repo.</div>
+</div>
+
+<div class="terminal-window">
+  <div class="terminal-titlebar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <div class="terminal-title">xx setup (current)</div>
+  </div>
+  <div class="terminal-body"><span class="c">Welcome to xx digest.</span>
+You'll connect X, validate your OpenAI key, choose a repo, and calibrate the feed filter.
+
+Twitter credentials are available from https://developer.twitter.com/en/portal/dashboard
+X API key: <span class="input">••••••••••</span>
+X API secret: <span class="input">••••••••••</span>
+X access token: <span class="input">••••••••••</span>
+X access token secret: <span class="input">••••••••••</span>
+
+<span class="d">... validates ...</span>
+<span class="g">Twitter credentials validated.</span>
+
+OpenAI keys are available from https://platform.openai.com/api-keys
+OpenAI API key: <span class="input">••••••••••</span>
+<span class="g">OpenAI key validated.</span>
+<span class="g">Credentials saved.</span>
+
+<span class="b">Found these git repositories:</span>
+  <span class="c">1</span>. /Users/macbook/Code/ai-agent-project
+  <span class="c">2</span>. /Users/macbook/Code/my-saas-app
+  <span class="c">3</span>. /Users/macbook/Code/portfolio-site
+  <span class="c">4</span>. /Users/macbook/Code/xxcli
+  <span class="c">5</span>. /Users/macbook/Projects/side-project
+  <span class="c">6</span>. /Users/macbook/Developer/experiment
+Pick a repo number or enter a custom path [1]: <span class="input">4</span>
+
+<span class="b">I found these files for extra context:</span>
+  - README.md
+  - CLAUDE.md
+Use these files for context? [Y/n]: <span class="input">Y</span>
+
+<span class="d">... 10 calibration tweets ...</span>
+
+<span class="g">Setup complete. Run `xx digest` to get your first curated feed.</span></div>
+</div>
+
+<div class="annotation">
+  <span class="tag tag-kept">REFERENCE</span> This is the current flow for comparison. See <a href="SETUP-WIZARD-CURRENT.html" style="color: var(--accent);">SETUP-WIZARD-CURRENT.html</a> for the fully annotated version with all issue tags.
+</div>
+
+</section>
+
+<!-- ─── Recommendation ─── -->
+<div class="summary-box">
+  <h2>Recommendation: Variant D</h2>
+  <p style="color: var(--text); margin-bottom: 12px;">
+    <strong style="color: var(--accent);">Variant D is the build target.</strong> It combines the best of all three explorations.
+  </p>
+  <p style="color: var(--text-muted); margin-bottom: 8px;">
+    B's welcome panel (orientation before config). A/C's smart scanning (auto-detect and skip). B's guided explanations at each step (the "why"). B's grouped credential panel with C's paste-once. C's fuzzy search + B's rich multi-select repo picker with activity metadata. Obsidian vault discovery for local context beyond code. B's 3-tweet calibration. B's rich completion summary.
+  </p>
+  <p style="color: var(--text-muted); margin-bottom: 8px;">
+    Key innovation: Codex subscription auto-detection, Obsidian vault scanning as context source (replaces redundant in-repo file detection), and adaptive step counting that only shows what's actually needed.
+  </p>
+  <p style="color: var(--text-muted);">
+    Result: ~90s fresh install, ~60s with env vars. Always guided, never tedious. Adapts to every user's setup.
+  </p>
+</div>
+
+</div><!-- .page-content -->
+
+<script>
+// Highlight active nav link on scroll
+const sections = document.querySelectorAll('.variant-section');
+const navLinks = document.querySelectorAll('.nav-link');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const activeLink = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+}, { rootMargin: '-80px 0px -60% 0px' });
+
+sections.forEach(section => observer.observe(section));
+
+// Smooth scroll for nav links
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xx Setup Wizard — Current Flow</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --dim: #565f89;
+    --cyan: #7dcfff;
+    --green: #9ece6a;
+    --red: #f7768e;
+    --yellow: #e0af68;
+    --blue: #7aa2f7;
+    --bold: #ffffff;
+    --panel-bg: #24283b;
+    --border: #3b4261;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0f0f17;
+    color: var(--fg);
+    font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+
+  .page-header {
+    max-width: 900px;
+    margin: 0 auto 48px;
+    text-align: center;
+  }
+
+  .page-header h1 {
+    color: var(--cyan);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .page-header p {
+    color: var(--dim);
+    font-size: 14px;
+  }
+
+  .step {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step-number {
+    background: var(--cyan);
+    color: var(--bg);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-weight: 600;
+    color: var(--bold);
+    font-size: 15px;
+  }
+
+  .step-subtitle {
+    color: var(--dim);
+    font-size: 12px;
+    margin-left: auto;
+  }
+
+  .terminal {
+    padding: 20px 24px;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .cyan { color: var(--cyan); }
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .yellow { color: var(--yellow); }
+  .blue { color: var(--blue); }
+  .dim { color: var(--dim); }
+  .bold { color: var(--bold); font-weight: 700; }
+  .prompt-input { color: var(--green); text-decoration: underline; text-decoration-style: dotted; }
+
+  .annotation {
+    max-width: 900px;
+    margin: -24px auto 40px;
+    padding: 16px 24px;
+    background: #1e1e2e;
+    border: 1px dashed var(--yellow);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    font-size: 13px;
+  }
+
+  .annotation-label {
+    color: var(--yellow);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .annotation p {
+    color: var(--dim);
+    margin: 4px 0;
+  }
+
+  .issue-tag {
+    display: inline-block;
+    background: rgba(247, 118, 142, 0.15);
+    color: var(--red);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  .flow-arrow {
+    max-width: 900px;
+    margin: -20px auto 20px;
+    text-align: center;
+    color: var(--dim);
+    font-size: 20px;
+  }
+
+  .code-ref {
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-divider {
+    max-width: 900px;
+    margin: 48px auto 32px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .summary-box {
+    max-width: 900px;
+    margin: 48px auto;
+    background: var(--panel-bg);
+    border: 1px solid var(--cyan);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .summary-box h2 {
+    color: var(--cyan);
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .summary-box table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .summary-box td {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .summary-box td:first-child {
+    color: var(--dim);
+    width: 200px;
+  }
+
+  .config-path {
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 12px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>xx setup — Current Wizard Flow</h1>
+  <p>Visual walkthrough of what a user sees when they run <span class="cyan">xx setup</span></p>
+  <p class="dim" style="margin-top: 8px;">Source: src/xxcli/onboarding.py · Config: ~/.xxcli/config.yaml</p>
+</div>
+
+<!-- ─── STEP 1: Welcome ─── -->
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">1</div>
+    <div class="step-title">Welcome</div>
+    <div class="step-subtitle">onboarding.py:37-39</div>
+  </div>
+  <div class="terminal"><span class="cyan">Welcome to xx digest.</span>
+You'll connect X, validate your OpenAI key, choose a repo, and calibrate the feed filter.</div>
+</div>
+
+<div class="annotation">
+  <div class="annotation-label">Notes</div>
+  <p>This is the only orientation the user gets. No explanation of what "xx digest" actually does, what "calibrate" means, or how long this will take.</p>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- ─── STEP 2: X API Credentials ─── -->
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">2</div>
+    <div class="step-title">X/Twitter API Credentials</div>
+    <div class="step-subtitle">onboarding.py:106-131 · 4 hidden prompts</div>
+  </div>
+  <div class="terminal">Twitter credentials are available from https://developer.twitter.com/en/portal/dashboard
+X API key: <span class="prompt-input">••••••••••••••••</span>
+X API secret: <span class="prompt-input">••••••••••••••••</span>
+X access token: <span class="prompt-input">••••••••••••••••</span>
+X access token secret: <span class="prompt-input">••••••••••••••••</span>
+
+<span class="dim">... validates by calling client.get_me() ...</span>
+
+<span class="green">Twitter credentials validated.</span></div>
+</div>
+
+<div class="annotation">
+  <div class="annotation-label">What happens technically</div>
+  <p>Uses Tweepy OAuth 1.0a User Context. All 4 keys come from the X Developer Portal.</p>
+  <p>Validation: creates a tweepy.Client, calls <code>get_me()</code>. If it fails → "did not validate, try again" loop.</p>
+  <p>If credentials already exist in config → skips with "Credentials already configured."</p>
+  <p><span class="issue-tag">FRICTION</span> User must manually navigate to X Developer Portal, create an app, and copy 4 separate keys. No OAuth browser flow, no clipboard help.</p>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- ─── STEP 3: OpenAI Key ─── -->
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">3</div>
+    <div class="step-title">OpenAI API Key</div>
+    <div class="step-subtitle">onboarding.py:133-139</div>
+  </div>
+  <div class="terminal">OpenAI keys are available from https://platform.openai.com/api-keys
+OpenAI API key: <span class="prompt-input">••••••••••••••••</span>
+
+<span class="dim">... validates by calling check_openai_key() ...</span>
+
+<span class="green">OpenAI key validated.</span>
+<span class="green">Credentials saved.</span></div>
+</div>
+
+<div class="annotation">
+  <div class="annotation-label">What happens technically</div>
+  <p>Validation: calls <code>check_openai_key()</code> in llm.py.</p>
+  <p>All 5 keys are saved together under <code>credentials:</code> in <code>~/.xxcli/config.yaml</code>.</p>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- ─── STEP 4: Repo Picker ─── -->
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">4</div>
+    <div class="step-title">Git Repository Picker</div>
+    <div class="step-subtitle">onboarding.py:156-177 · THE step you're asking about</div>
+  </div>
+  <div class="terminal"><span class="blue">Found these git repositories:</span>
+  <span class="cyan">1</span>. /Users/macbook/Code/ai-agent-project
+  <span class="cyan">2</span>. /Users/macbook/Code/my-saas-app
+  <span class="cyan">3</span>. /Users/macbook/Code/portfolio-site
+  <span class="cyan">4</span>. /Users/macbook/Code/xxcli
+  <span class="cyan">5</span>. /Users/macbook/Projects/side-project
+  <span class="cyan">6</span>. /Users/macbook/Developer/experiment
+Pick a repo number or enter a custom path [<span class="dim">1</span>]: <span class="prompt-input">4</span></div>
+</div>
+
+<div class="annotation">
+  <div class="annotation-label">What happens technically</div>
+  <p><strong>Scan logic:</strong> Checks 5 hardcoded roots (~/Code, ~/Projects, ~/Developer, ~/repos, ~/src) + cwd. For each root, looks at direct children for <code>.git/</code> dirs. Sorted alphabetically. No depth > 1.</p>
+  <p><strong>Selection:</strong> Pick a number OR type a custom path. Only ONE repo.</p>
+  <p><strong>Saved as:</strong> <code>default_repo</code> in config.yaml</p>
+
+  <p style="margin-top: 12px;"><span class="issue-tag">NO CONTEXT</span> Doesn't explain WHY you're picking a repo. What does it do with it? (Answer: builds git context for the LLM prompt so digest scores tweets by relevance to what you're building)</p>
+  <p><span class="issue-tag">SINGLE REPO</span> Only picks one <code>default_repo</code>. No support for multiple projects or switching.</p>
+  <p><span class="issue-tag">NO INTELLIGENCE</span> Alphabetical listing of ALL repos. Doesn't check <code>git log</code> recency — a repo you last touched 2 years ago is listed equally with one you committed to today.</p>
+  <p><span class="issue-tag">FLAT LIST</span> Can find 50+ repos on a dev machine. No grouping, no filtering, no search.</p>
+  <p><span class="issue-tag">NO GIT ACTIVITY</span> Doesn't show branch, last commit date, or any signal about which repos are active.</p>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- ─── STEP 5: Context Files ─── -->
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">5</div>
+    <div class="step-title">Context Files Confirmation</div>
+    <div class="step-subtitle">onboarding.py:180-191</div>
+  </div>
+  <div class="terminal"><span class="blue">I found these files for extra context:</span>
+  - README.md
+  - CLAUDE.md
+Use these files for context? [<span class="dim">Y/n</span>]: <span class="prompt-input">Y</span></div>
+</div>
+
+<div class="annotation">
+  <div class="annotation-label">What happens technically</div>
+  <p>Scans selected repo for: README.md, CLAUDE.md, TODO.md, ARCHITECTURE.md, PRODUCT-SENSE.md</p>
+  <p>If found → asks y/N. If none found → silently continues with "git context only."</p>
+  <p>Saved as <code>context_files:</code> list in config.yaml.</p>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- ─── STEP 6: Calibration ─── -->
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">6</div>
+    <div class="step-title">Feed Calibration</div>
+    <div class="step-subtitle">onboarding.py:193-257 · Up to 10 tweets</div>
+  </div>
+  <div class="terminal"><span class="cyan">Calibration</span>
+I'll show a few real timeline items so the filter can learn your taste.
+
+<span class="dim">──────────── </span><span class="cyan">Calibration Tweet 1</span><span class="dim"> ────────────</span>
+<span class="bold">Andrej Karpathy</span> <span class="dim">@karpathy</span>
+The thing about training large language models is that
+the loss curve tells you almost everything you need to
+know about what went wrong.
+Is this useful? [U]seful / [M]aybe / [S]kip / [N]oise [<span class="dim">s</span>]: <span class="prompt-input">u</span>
+<span class="green">Got it. Prioritizing language / models / training for xxcli.</span>
+
+<span class="dim">──────────── </span><span class="cyan">Calibration Tweet 2</span><span class="dim"> ────────────</span>
+<span class="bold">Some Influencer</span> <span class="dim">@influencer</span>
+Just had the best avocado toast in Brooklyn 🥑
+Is this useful? [U]seful / [M]aybe / [S]kip / [N]oise [<span class="dim">s</span>]: <span class="prompt-input">n</span>
+
+<span class="dim">──────────── </span><span class="cyan">Calibration Tweet 3</span><span class="dim"> ────────────</span>
+<span class="bold">Vercel</span> <span class="dim">@vercel</span>
+Next.js 16 is here. Cache Components, async headers,
+and the Turbopack bundler is now default.
+Is this useful? [U]seful / [M]aybe / [S]kip / [N]oise [<span class="dim">s</span>]: <span class="prompt-input">m</span>
+
+<span class="dim">... repeats for up to 10 tweets ...</span></div>
+</div>
+
+<div class="annotation">
+  <div class="annotation-label">What happens technically</div>
+  <p>Fetches 15 real tweets from your timeline via <code>get_home_timeline()</code>, shows up to 10.</p>
+  <p>Each response is logged via <code>log_signal()</code> to ~/.xxcli/feedback.jsonl:</p>
+  <p>&nbsp;&nbsp;U(seful) → signal_type="keep", score=8, classification="adopt"</p>
+  <p>&nbsp;&nbsp;M(aybe) → signal_type="recover", score=6, classification="copy"</p>
+  <p>&nbsp;&nbsp;S(kip) → signal_type="discard", score=2, classification="skip"</p>
+  <p>&nbsp;&nbsp;N(oise) → signal_type="discard", score=0, classification="skip"</p>
+  <p>First "useful" tweet → topic extraction via regex → "Prioritizing [topic] for [repo]"</p>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- ─── STEP 7: Done ─── -->
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">7</div>
+    <div class="step-title">Complete</div>
+    <div class="step-subtitle">onboarding.py:64-75</div>
+  </div>
+  <div class="terminal"><span class="green">Setup complete. Run `xx digest` to get your first curated feed.</span></div>
+</div>
+
+<div class="annotation">
+  <div class="annotation-label">What gets saved to ~/.xxcli/config.yaml</div>
+  <p><code>credentials:</code> — all 5 API keys</p>
+  <p><code>default_repo:</code> — single repo path (e.g. /Users/macbook/Code/xxcli)</p>
+  <p><code>context_files:</code> — list of doc filenames (e.g. [README.md, CLAUDE.md])</p>
+  <p><code>default_since:</code> — "24h"</p>
+  <p><code>default_count:</code> — 5</p>
+  <p><code>tthw:</code> — setup timing (started, completed, duration_seconds)</p>
+</div>
+
+<!-- ─── ARCHITECTURE SUMMARY ─── -->
+
+<div class="summary-box">
+  <h2>Architecture Summary</h2>
+  <table>
+    <tr>
+      <td>Entry point</td>
+      <td><code>xx setup</code> → cli.py:302 → onboarding.py:run_setup_wizard()</td>
+    </tr>
+    <tr>
+      <td>Also triggered by</td>
+      <td><code>xx digest</code> if credentials are missing (cli.py:391)</td>
+    </tr>
+    <tr>
+      <td>X/Twitter auth</td>
+      <td>OAuth 1.0a — 4 keys manually pasted, validated via <code>tweepy.Client.get_me()</code></td>
+    </tr>
+    <tr>
+      <td>OpenAI auth</td>
+      <td>API key manually pasted, validated via <code>check_openai_key()</code></td>
+    </tr>
+    <tr>
+      <td>Repo discovery</td>
+      <td>Scans 5 hardcoded dirs + cwd for <code>.git/</code> children (depth=1 only)</td>
+    </tr>
+    <tr>
+      <td>Repo selection</td>
+      <td>Single repo only. Stored as <code>default_repo</code> in config</td>
+    </tr>
+    <tr>
+      <td>Context building</td>
+      <td>context.py reads git log, diff, branch, README, deps from selected repo</td>
+    </tr>
+    <tr>
+      <td>Purpose of repo</td>
+      <td>Feeds into LLM prompt → digest scores tweets by relevance to your current work</td>
+    </tr>
+    <tr>
+      <td>Calibration</td>
+      <td>10 tweets rated → feedback.jsonl → used as few-shot examples for future digests</td>
+    </tr>
+    <tr>
+      <td>Config storage</td>
+      <td><code>~/.xxcli/config.yaml</code></td>
+    </tr>
+    <tr>
+      <td>Feedback storage</td>
+      <td><code>~/.xxcli/feedback.jsonl</code></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ─── ISSUES SUMMARY ─── -->
+
+<div class="summary-box" style="border-color: var(--yellow);">
+  <h2 style="color: var(--yellow);">Known Issues with Current Flow</h2>
+  <table>
+    <tr>
+      <td><span class="issue-tag">REPO PICKER</span></td>
+      <td>No explanation of WHY you're picking a repo or what it does</td>
+    </tr>
+    <tr>
+      <td><span class="issue-tag">SINGLE REPO</span></td>
+      <td>Only stores one <code>default_repo</code>. Can't track multiple projects.</td>
+    </tr>
+    <tr>
+      <td><span class="issue-tag">NO RECENCY</span></td>
+      <td>Lists repos alphabetically. A 2-year-old dead repo = active project you committed to today.</td>
+    </tr>
+    <tr>
+      <td><span class="issue-tag">NO GIT INTEL</span></td>
+      <td>Doesn't show branch, last commit, activity level. You're choosing blind.</td>
+    </tr>
+    <tr>
+      <td><span class="issue-tag">NO SWITCHING</span></td>
+      <td><code>xx digest --repo .</code> exists but there's no "switch default repo" command or multi-repo digest.</td>
+    </tr>
+    <tr>
+      <td><span class="issue-tag">FLAT DUMP</span></td>
+      <td>50+ repos on a dev machine → unmanageable numbered list.</td>
+    </tr>
+    <tr>
+      <td><span class="issue-tag">CRED UX</span></td>
+      <td>4 separate hidden prompts for X API. High friction, easy to mis-paste.</td>
+    </tr>
+    <tr>
+      <td><span class="issue-tag">NO PROGRESS</span></td>
+      <td>No step indicator (1/6, 2/6...). User doesn't know how far along they are.</td>
+    </tr>
+    <tr>
+      <td style="border-bottom: none;"><span class="issue-tag">CALIBRATION</span></td>
+      <td style="border-bottom: none;">Rating 10 tweets is tedious during setup. Could be deferred or shortened.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

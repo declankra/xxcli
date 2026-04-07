@@ -2,7 +2,7 @@
 
 # xx
 
-**Twitter/X from the terminal. Stay up to date without the doom scroll.**
+**X without the doomscroll. Intentional Xeets automatically personalized to what you're working on.**
 
 </div>
 
@@ -10,7 +10,7 @@
 
 ## Why
 
-I use X to stay current on AI/tech/software/business. This includes new tools, frameworks, techniques, and research I find helpful and interesting as someone who works in the space. The space moves so fast now that it's important to keep up. But it's even more important to protect your focus.
+X is useful for staying current on AI/tech/software/business, but i'm not intentional. This includes new tools, frameworks, techniques, and research I find helpful and interesting as someone who works in the space. The space moves so fast now that it's important to keep up. But it's even more important to protect your focus.
 
 X on the browser is very addicting. I'm too weak at times to resist the scroll (especially on the toilet).
 
