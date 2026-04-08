@@ -1,8 +1,12 @@
+> [!DEPRECATED]
+> X changed their API policies and the project is no longer feasible on free API limits.
+> [See X API pricing details](https://docs.x.com/x-api/getting-started/pricing).
+
 <div align="center">
 
 # xx
 
-**X without the doomscroll. Intentional Xeets automatically personalized to what you're working on.**
+**Apply useful ideas from X without the doomscroll. No X, X.**
 
 </div>
 
@@ -10,17 +14,36 @@
 
 ## Why
 
-X is useful for staying current on AI/tech/software/business, but i'm not intentional. This includes new tools, frameworks, techniques, and research I find helpful and interesting as someone who works in the space. The space moves so fast now that it's important to keep up. But it's even more important to protect your focus.
+X is useful for staying current on AI/tech/software/business (tools/frameworks/techniques/research/ideas). The space moves fast so it's competitively important to keep up. The problem is that too many scrolls are mindless and waste time.
 
-X on the browser is very addicting. I'm too weak at times to resist the scroll (especially on the toilet).
+X on the browser is mindless. X in the terminal would be intentional.
 
-**Good ideas persist over time.** I don't need to check X every 30 minutes, let alone everyday. I can increase my signal-to-noise ratio dramatically by consuming intentionally.
+**The CLI strips away the addicting stuff.** I've found the CLI to be helpful with focusing only on the task at hand. It's gone so far as to almost replace my entire use of ChatGPT in the browser at this point. The CLI is a great question-answer machine.
 
-**The CLI strips away the addicting stuff.** I've found the CLI to be helpful with focusin only on the task at hand. It's even gone so far as to almost entirely replaced my use of ChatGPT in the browser at this point. The CLI is a great question-answer machine.
+**Good ideas persist over time.** I don't need to check X every 30 minutes, let alone everyday. I can increase my signal-to-noise ratio dramatically by comsuming less often.
 
-I've got questions, want to stay up to date and interact with other ideas, without losing my focus. To me, that means using X without X, "not X".
+I've got questions, want to stay up to date and interact with other ideas, without sacrificing my focus. To me, that means using X without X, "not X".
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">I love that my job is now working on the thing that has historically distracted me from my job</p>&mdash; Benji Taylor (@benjitaylor) <a href="https://twitter.com/benjitaylor/status/2037524265109745924?ref_src=twsrc%5Etfw">March 27, 2026</a></blockquote>
+
+
+## How - Product Design
+
+- **Dual UX: Human CLI/TUI + Agent Skill.** Made for both you and your agent to understand and use.
+
+- **Less work, not translated work.** Effective AI products don't transform work into another format. the work needs to be automated and the remaining pieces should require a higher-level, more strategic input from the user. 
+
+- **Built-in evals.** Using the product is the eval. Easily/quickly give feedback to the loop/model without knowing it.
+
+- **Self-improve always.** therefore, the product the product gets better on every new launch. The agent reads accumulated feedback and autonomously evolves its scoring rules. The user never touches the prompt.
+
+- **Not rigid.** Avoiding over-constraining the harness. The next model advance will need less scaffolding. Therefore the scoring and filtering leans heavily on model manuevarability and agency.
+
+- **Progressive disclosure.** Each prompt is guiding you along the path of complexity isntead of asking all up front initially.
+
+- **Close loops.** The user shouldn't be left with any "pending" (bookmarked) items after a session. Allow them to immedaitely apply it to their work.
+
+- **No need to manually edit config.** The setup wizard handles all configuration through interactive questions. config.yaml exists as persistence, but the user should never need to open it.
 
 ---
 
@@ -106,8 +129,6 @@ Things I'm building towards:
   > "sees new thing -> ah yeah this can be useful -> prompt codex in repo 'how can this be useful?' -> debate if its actually useful"
   >
   > — [dkBuilds (@dkbuildsco), March 2, 2026](https://x.com/dkbuildsco/status/2028551284853190733)
-
-- **AI-powered relevance filtering** — filter the tweets in my feed most applicable to what my goals are and what I'm working on
 
 - **Agent-native** — what does a claude code/codex terminal agent need (skills, deterministic tools, user context...) so that the user (myself) could do the above?
 
